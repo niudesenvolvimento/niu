@@ -1,0 +1,114 @@
+<!DOCTYPE html > 
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:niu="http://java.sun.com/jsf/composite/components"
+      template="/WEB-INF/design/_decorate-config.xhtml">
+       
+<ui:define name="content-decorate">
+
+
+	<h:form id="formCategorias">
+		<p:panel>
+		
+			<p:commandButton icon="fa fa-plus" value="Nova" style="font-size:1.3em"
+				process="@this"
+				action="#{categoriaController.novo()}"
+				oncomplete="PF('DialogCategoria').show()"
+				update=":formCategoria"
+				/>
+		
+			<niu:globalNotification />
+
+			<p:dataTable value="#{categoriaController.categorias}" var="categoriaVar"
+				emptyMessage="Não há categorias de chamados">
+			
+				<p:column headerText="#" styleClass="colCenter col10p">
+					#{categoriaVar.id}
+				</p:column>
+			
+				<p:column headerText="Nome">
+					<h:outputText value="#{categoriaVar.nome}" styleClass="destak2" />
+				</p:column>
+				
+				<p:column headerText="Ativa?" styleClass="col10p colCenter">
+					<niu:displayFlag flag="#{categoriaVar.flagAtivo}" />
+				</p:column>
+
+				<p:column styleClass="colCenter col10p">
+					<p:commandButton icon="fa fa-edit" value="Editar" 
+						process="@this"
+						action="#{categoriaController.editar(categoriaVar)}"
+						oncomplete="PF('DialogCategoria').show()"
+						update=":formCategoria"
+						/>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	
+	<p:dialog widgetVar="DialogCategoria" header="Categoria"
+		modal="true" dynamic="true" closeOnEscape="true"
+		height="50%" width="50%" >
+		
+	
+		<h:form id="formCategoria">
+
+			<p:panel>
+
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel for="inNome" value="Nome da Categoria" styleClass="req" />
+					<h:panelGrid>
+						<p:inputText id="inNome" value="#{categoriaController.categoria.nome}" size="30" required="true" />
+						<p:message for="inNome" />
+					</h:panelGrid>
+
+					<p:outputLabel for="inFlag" value="Ativo?" styleClass="req" />
+					<h:panelGrid>
+						<p:inputSwitch id="inFlag" value="#{categoriaController.categoria.flagAtivo}" offLabel="Não" onLabel="Sim" />
+						<p:message for="inFlag" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+			</p:panel>
+			
+			<niu:globalNotification />
+			
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton icon="fa fa-check" value="Salvar" style="font-size:1.3em"
+						action="#{categoriaController.salvar() }"
+						update="@form :formCategorias"
+						oncomplete="if (args.sucessoSomente) PF('DialogCategoria').hide()"
+						/>
+				</p:toolbarGroup>
+				
+				<p:toolbarGroup align="right" rendered="#{not categoriaController.categoria.transient}">
+					<p:menuButton icon="fa fa-trash" value="remover?" >
+						<p:menuitem icon="fa fa-trash" value="Sim, remover" 
+							action="#{categoriaController.remover() }"
+							process="@this"
+							oncomplete="if (args.sucessoSomente) PF('DialogCategoria').hide()"
+							update="@form :formCategorias"
+							/>
+						<p:menuitem icon="fa fa-close" value="Não" 
+							process="@none" global="false" update="@none"
+							/>
+					</p:menuButton>
+				</p:toolbarGroup>
+				
+			
+			</p:toolbar>
+			
+	
+		</h:form>
+	</p:dialog>
+	
+	
+
+	
+</ui:define>
+</ui:decorate>

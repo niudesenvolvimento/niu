@@ -1,0 +1,176 @@
+<!DOCTYPE html > 
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:niu="http://java.sun.com/jsf/composite/components"
+      template="/WEB-INF/design/_decorate-base-conhecimento.xhtml">
+       
+<ui:define name="content-decorate">
+
+	<h:form>
+		<p:panel>
+			<h:outputText value="Tutoriais" styleClass="destak1" />
+			<p:separator />
+			
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:panelGrid>
+					<p:outputLabel value="Título" />
+					<p:inputText value="#{bctutorialController.filtroTitulo}" size="50" style="font-size:1.2em" />
+				</h:panelGrid>
+				
+				<p:commandButton icon="fa fa-search" value="Pesquisar" style="font-size:1.3em"
+					action="#{bctutorialController.pesquisar()}"
+					update="@form :formTutoriais"
+					/>
+			</h:panelGrid>
+		</p:panel>
+	</h:form>
+	
+	
+
+	<h:form id="formTutoriais">
+		<p:panel>
+
+			<p:commandButton icon="fa fa-plus" value="Novo" style="font-size:1.3em"
+				process="@this" 
+				action="#{bctutorialController.novo()}"
+				update=":formTutorial"
+				oncomplete="PF('DialogTutorial').show()"
+				/>
+				
+				
+			<niu:globalNotification />
+	
+	
+			<p:outputPanel rendered="#{not empty bctutorialController.tutoriais}">
+		
+				<p:dataTable value="#{bctutorialController.tutoriais}" var="tutorialVar"
+					emptyMessage="Não há tutorial">
+					
+					<p:column headerText="ID" styleClass="col5p colCenter">
+						#{tutorialVar.id}
+					</p:column>
+				
+					<p:column headerText="Título" sortBy="#{tutorialVar.titulo}">
+						<h:outputText value="#{tutorialVar.titulo}" styleClass="destak2" />
+					</p:column>
+					
+					<p:column headerText="Criado Em" styleClass="col5p colCenter" sortBy="#{tutorialVar.infoLog.criadoEm }">
+						<niu:outputDate value="#{tutorialVar.infoLog.criadoEm }" styleClass="less2" />
+					</p:column>
+	
+					<p:column headerText="Criado Por" styleClass="col5p colCenter" sortBy="#{tutorialVar.infoLog.criadoPor }">
+						<h:outputText value="#{tutorialVar.infoLog.criadoPor }" styleClass="less2" />
+					</p:column>
+	
+					<p:column headerText="Atualizado Em" styleClass="col5p colCenter" sortBy="#{tutorialVar.infoLog.atualizadoEm }">
+						<niu:outputDate value="#{tutorialVar.infoLog.atualizadoEm }" styleClass="less2" />
+					</p:column>
+	
+					<p:column headerText="Atualizado Por" styleClass="col5p colCenter" sortBy="#{tutorialVar.infoLog.atualizadoPor }">
+						<h:outputText value="#{tutorialVar.infoLog.atualizadoPor }" styleClass="less2" />
+					</p:column>
+	
+					<p:column styleClass="col5p colCenter">
+						<p:commandButton icon="fa fa-edit" value="editar" 
+							process="@this"
+							action="#{bctutorialController.editar(tutorialVar)}"
+							update=":formTutorial"
+							oncomplete="PF('DialogTutorial').show()"
+							/>
+					</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+		</p:panel>
+	</h:form>
+
+	
+	
+	<p:dialog widgetVar="DialogTutorial" header="Tutorial"
+		modal="true" dynamic="true" closeOnEscape="true" maximizable="true"
+		position="200,50" width="80%" >
+		
+		<h:form id="formTutorial">
+		
+			<p:panel>
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel value="ID" />
+					<h:outputText value="#{bctutorialController.tutorial.id}" styleClass="destak2" />
+				
+					<p:outputLabel for="inTit" value="Título" styleClass="req" />
+					<h:panelGrid>
+						<p:inputText id="inTit" value="#{bctutorialController.tutorial.titulo}" size="50" required="true" style="font-size:1.3em" />
+						<p:message for="inTit" />
+					</h:panelGrid>
+	
+					<p:outputLabel for="inCon" value="Conteúdo" styleClass="req" />
+					<h:panelGrid>
+						<p:editor id="inCon" value="#{bctutorialController.tutorial.conteudo}" required="true" 	
+							height="400" width="800" 
+							/>
+						<p:message for="inCon" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+			
+
+			<p:panel>
+				<p:outputLabel value="Histórico" styleClass="destak3" />
+				<p:separator />
+				
+				<h:panelGrid columns="2" cellpadding="10">
+					<p:panelGrid columns="2" rendered="#{not bctutorialController.tutorial.transient}" >
+						<h:outputText value="Criado em" styleClass="less2" />
+						<niu:outputDate value="#{bctutorialController.tutorial.infoLog.criadoEm }" styleClass="destak3 less2" />
+					
+						<h:outputText value="Criado por" styleClass="less2" />
+						<h:outputText value="#{bctutorialController.tutorial.infoLog.criadoPor }" styleClass="destak3 less2" />
+					</p:panelGrid>
+			
+					<p:panelGrid columns="2" rendered="#{bctutorialController.tutorial.infoLog.flagJaFoiAtualizado }">
+						<h:outputText value="Atualizado em" styleClass="less2" />
+						<niu:outputDate value="#{bctutorialController.tutorial.infoLog.atualizadoEm }" styleClass="destak3 less2" />
+					
+						<h:outputText value="Atualizado por" styleClass="less2" />
+						<h:outputText value="#{bctutorialController.tutorial.infoLog.atualizadoPor }" styleClass="destak3 less2" />
+					</p:panelGrid>
+				</h:panelGrid>				
+			</p:panel>
+
+			
+			<niu:globalNotification />
+
+			
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton icon="fa fa-check" value="Salvar" style="font-size:1.2em" 
+						action="#{bctutorialController.salvar()}"
+						update="@form :formTutoriais"
+						oncomplete="if (args.sucessoSomente) PF('DialogTutorial').hide()"
+						/>
+				</p:toolbarGroup>
+				
+				<p:toolbarGroup align="right" rendered="#{not bctutorialController.tutorial.transient}">
+					<p:menuButton value="remover?">
+						<p:menuitem icon="fa fa-trash" value="Sim, remover"
+							process="@this" 
+							action="#{bctutorialController.remover() }"
+							update="@form :formTutoriais"
+							oncomplete="if (args.sucessoSomente) PF('DialogTutorial').hide()"
+							/> 
+						<p:menuitem icon="fa fa-close" value="Não"
+							process="@none" update="@none" global="false"
+							/>
+					</p:menuButton>
+				</p:toolbarGroup>
+				
+
+			</p:toolbar>
+		</h:form>
+	</p:dialog>
+
+	
+</ui:define>
+</ui:decorate>

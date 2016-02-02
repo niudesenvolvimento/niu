@@ -1,0 +1,213 @@
+<!DOCTYPE html > 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:niu="http://java.sun.com/jsf/composite/components"
+      template="/WEB-INF/design/_template-main.xhtml">
+       
+<ui:define name="title">Usuários</ui:define>       
+       
+<ui:define name="content">
+
+	<p:panel>
+		<h:form id="formUsuarios">
+		
+			<p:commandButton icon="fa fa-plus" value="Novo" style="font-size:1.3em" 
+				process="@this"
+				action="#{usuarioController.novo()}"
+				oncomplete="PF('DialogUsuario').show()"
+				update=":regiaoUsuario"
+				/>
+
+			<niu:globalNotification />
+		
+			<p:dataTable value="#{usuarioController.usuarios}" var="usuarioVar" 
+				rendered="#{not empty usuarioController.usuarios}">
+				
+				<p:column headerText="Login" sortBy="#{usuarioVar.login}">
+					<h:outputText value="#{usuarioVar.login}" styleClass="destak3" />
+				</p:column>
+				
+				<p:column headerText="Perfil" sortBy="#{usuarioVar.perfil}">
+					<h:outputText value="#{usuarioVar.perfil.descricao}" />
+				</p:column>
+			
+				<p:column headerText="Criado em" sortBy="#{usuarioVar.infoLog.criadoEm}">
+					<niu:outputTimestamp value="#{usuarioVar.infoLog.criadoEm}" styleClass="less2" />
+				</p:column>
+
+				<p:column headerText="Criado por" sortBy="#{usuarioVar.infoLog.criadoPor}">
+					<h:outputText value="#{usuarioVar.infoLog.criadoPor}" styleClass="less2" />
+				</p:column>
+			
+				<p:column headerText="Ativo?" styleClass="colCenter col10p" >
+					<niu:displayFlag flag="#{usuarioVar.flagAtivo}" />
+				</p:column>
+
+				<p:column styleClass="col10p colCenter">
+					<p:commandButton icon="fa fa-edit" value="Editar" 
+						process="@this"
+						action="#{usuarioController.editar(usuarioVar)}"
+						oncomplete="PF('DialogUsuario').show()"
+						update=":regiaoUsuario"
+						/>
+				</p:column>
+
+			</p:dataTable>
+		
+		
+		</h:form>
+	</p:panel>
+
+
+
+	<p:dialog widgetVar="DialogUsuario" header="Usuário"
+		modal="true" closeOnEscape="true" dynamic="true" 
+		width="50%" height="50%">
+		
+		<p:outputPanel id="regiaoUsuario">
+			
+			<niu:globalNotification />
+			
+			
+			<p:tabView>
+				<p:tab title="Principal">
+				
+					<h:form>
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="5">
+							
+								<p:outputLabel for="inLogin" value="Login" styleClass="req" />
+								<h:panelGrid>
+									<p:inputText id="inLogin" value="#{usuarioController.usuario.login}" required="true" />
+									<p:message for="inLogin" />
+								</h:panelGrid>
+								
+								<p:outputLabel for="inPerfil" value="Perfil" styleClass="req" />
+								<h:panelGrid>
+									<p:selectOneMenu id="inPerfil" value="#{usuarioController.usuario.perfil}" required="true">
+										<f:selectItems value="#{enumHelper.perfis}" var="perfilVar" 
+											itemValue="#{perfilVar}" itemLabel="#{perfilVar.descricao}"
+											/>
+									</p:selectOneMenu> 
+									<p:message for="inPerfil" />
+								</h:panelGrid>
+			
+								<p:outputLabel for="inFlag" value="Ativo?" />
+								<h:panelGrid>
+									<p:inputSwitch id="inFlag" value="#{usuarioController.usuario.flagAtivo}" offLabel="Não" onLabel="Sim" />
+									<p:message for="inFlag" />
+								</h:panelGrid>
+								
+							</h:panelGrid>
+						</p:panel>
+						
+						<p:panel rendered="#{not usuarioController.usuario.transient}">
+							<h:outputText value="Histórico" styleClass="destak3" />
+							<p:separator />
+						
+							<h:panelGrid columns="5" cellpadding="5">
+							
+								<p:panelGrid columns="2" >
+									<h:outputText value="Criado em" styleClass="less2" />
+									<niu:outputTimestamp value="#{usuarioController.usuario.infoLog.criadoEm}" styleClass="destak3 less2" />
+								
+									<h:outputText value="Criado por" styleClass="less2" />
+									<h:outputText value="#{usuarioController.usuario.infoLog.criadoPor}" styleClass="destak3 less2" />
+								</p:panelGrid>
+							
+								<p:panelGrid columns="2" rendered="#{usuarioController.usuario.infoLog.flagJaFoiAtualizado}">
+									<h:outputText value="Atualizado em" styleClass="less2" />
+									<niu:outputTimestamp value="#{usuarioController.usuario.infoLog.atualizadoEm }" styleClass="destak3 less2" />
+								
+									<h:outputText value="Atualizado por" styleClass="less2" />
+									<h:outputText value="#{usuarioController.usuario.infoLog.atualizadoPor }" styleClass="destak3 less2" />
+								</p:panelGrid>
+			
+							</h:panelGrid>
+						</p:panel>			
+						
+						
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton icon="fa fa-check" value="Salvar" style="font-size:1.3em"
+									action="#{usuarioController.salvar()}"
+									update=":regiaoUsuario :formUsuarios"
+									/>
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right" rendered="#{not usuarioController.usuario.transient}">
+								<p:menuButton value="remover?">
+									<p:menuitem icon="fa fa-trash" value="Sim, remover" 
+										process="@this"
+										action="#{usuarioController.remover()}"
+										update="@form :formUsuarios"
+										oncomplete="if (args.sucessoSomente) PF('DialogUsuario').hide();"
+										/>
+									<p:menuitem icon="fa fa-close" value="Não" 
+										process="@none" global="false" update="@none"
+										/>
+								</p:menuButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+					</h:form>
+				</p:tab>
+			
+	
+	
+				<p:tab title="Senha" rendered="#{not usuarioController.usuario.transient}">
+				
+					<h:form id="formUsuarioSenha">
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="5">
+							
+								<p:outputLabel for="inSenha" value="Senha" styleClass="req" />
+								<h:panelGrid>
+									<p:password id="inSenha" value="#{usuarioController.senha1}" required="true"
+										feedback="true" inline="false"
+										promptLabel="Entre com a senha" 
+										weakLabel="Fraca" 
+										goodLabel="Razoável"
+										strongLabel="Forte"
+										/>
+									<p:message for="inSenha" />
+								</h:panelGrid>
+				
+								<p:outputLabel for="inSenha2" value="Senha de confirmação" styleClass="req" />
+								<h:panelGrid>
+									<p:password id="inSenha2" value="#{usuarioController.senha2}" required="true"
+										feedback="true" inline="false"
+										promptLabel="Confirme a senha" 
+										weakLabel="Fraca" 
+										goodLabel="Razoável"
+										strongLabel="Forte"
+										/>
+									<p:message for="inSenha2" />
+								</h:panelGrid>
+							
+							</h:panelGrid>
+						</p:panel>
+				
+						<niu:globalNotification />
+						
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton icon="fa fa-key" value="Trocar Senha" style="font-size:1.3em"
+									action="#{usuarioController.trocarSenha() }"
+									update="@form"
+									/>
+							</p:toolbarGroup>
+						</p:toolbar>
+	
+					</h:form>
+				</p:tab>
+			</p:tabView>
+		</p:outputPanel>
+
+	</p:dialog>
+
+	
+</ui:define>
+</ui:composition>

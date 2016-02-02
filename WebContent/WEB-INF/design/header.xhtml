@@ -1,0 +1,54 @@
+<!DOCTYPE html > 
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+	<p:toolbar>
+		<p:toolbarGroup>
+			<h:panelGrid columns="2" cellpadding="3" >
+
+				<h:panelGrid columns="2" cellpadding="1">
+					<h:graphicImage library="img" name="logo_uniplac_64.png" />
+					<h:outputText value="NIU Governança" styleClass="destak1" />				
+				</h:panelGrid>
+				
+			</h:panelGrid>
+		</p:toolbarGroup>
+		
+
+
+
+		<p:toolbarGroup align="right" >
+			<h:form>
+
+				<h:panelGrid columns="6" cellpadding="10">
+
+					<h:panelGrid columns="2" rendered="#{sessionHolder.flagLogado }" >
+						<i class="fa fa-user" />
+						<h:outputText value="#{sessionHolder.usuario.login }" styleClass="less2" />
+					</h:panelGrid>
+	
+					<h:panelGrid columns="2" rendered="#{sessionHolder.flagLogado }" >
+						<i class="fa fa-key" />
+						<h:outputText value="#{sessionHolder.usuario.perfil.descricao }" styleClass="less2" />
+					</h:panelGrid>
+
+					<p:commandButton icon="fa fa-sign-in" value="Entrar"
+						rendered="#{not sessionHolder.flagLogado}" 
+						ajax="false"
+						action="/login" 
+						/>
+				
+					<p:commandButton icon="fa fa-sign-out" value="Sair" ajax="false" 
+						rendered="#{sessionHolder.flagLogado}"
+						action="#{acessoController.doLogout() }"
+						/>
+				</h:panelGrid>
+			</h:form>
+		</p:toolbarGroup>
+	</p:toolbar>
+	
+
+</ui:fragment>

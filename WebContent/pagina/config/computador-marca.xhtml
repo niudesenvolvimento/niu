@@ -1,0 +1,115 @@
+<!DOCTYPE html > 
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:niu="http://java.sun.com/jsf/composite/components"
+      template="/WEB-INF/design/_decorate-config.xhtml">
+       
+<ui:define name="content-decorate">
+
+
+	<h:form id="formMarcas">
+		
+		<p:panel>
+		
+			<p:commandButton icon="fa fa-plus" value="Nova" style="font-size:1.3em"
+				process="@this"
+				action="#{computadorMarcaController.novo()}"
+				oncomplete="PF('DialogMarca').show()"
+				update=":formMarca"
+				/>
+		
+			<niu:globalNotification />
+		
+			<p:dataTable value="#{computadorMarcaController.marcas}" var="marcaVar"
+				emptyMessage="Não há marcas de computadores">
+			
+				<p:column headerText="#" styleClass="colCenter col10p">
+					#{marcaVar.id}
+				</p:column>
+			
+				<p:column headerText="Nome">
+					<h:outputText value="#{marcaVar.nome}" styleClass="destak2" />
+				</p:column>
+				
+				<p:column headerText="Ativa?" styleClass="col10p colCenter">
+					<niu:displayFlag flag="#{marcaVar.flagAtivo}" />
+				</p:column>
+
+				<p:column styleClass="colCenter col10p">
+					<p:commandButton icon="fa fa-edit" value="Editar" 
+						process="@this"
+						action="#{computadorMarcaController.editar(marcaVar)}"
+						oncomplete="PF('DialogMarca').show()"
+						update=":formMarca"
+						/>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	
+	
+	
+	<p:dialog widgetVar="DialogMarca" header="Marca de Computador"
+		modal="true" dynamic="true" closeOnEscape="true"
+		height="50%" width="50%" >
+	
+		<h:form id="formMarca">
+
+			<p:panel>
+
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel for="inNome" value="Nome" styleClass="req" />
+					<h:panelGrid>
+						<p:inputText id="inNome" value="#{computadorMarcaController.marca.nome}" size="30" required="true" />
+						<p:message for="inNome" />
+					</h:panelGrid>
+
+					<p:outputLabel for="inFlag" value="Ativo?" styleClass="req" />
+					<h:panelGrid>
+						<p:inputSwitch id="inFlag" value="#{computadorMarcaController.marca.flagAtivo}" offLabel="Não" onLabel="Sim" />
+						<p:message for="inFlag" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+			</p:panel>
+			
+			<niu:globalNotification />
+			
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton icon="fa fa-check" value="Salvar" style="font-size:1.3em"
+						action="#{computadorMarcaController.salvar() }"
+						update="@form :formMarcas"
+						oncomplete="if (args.sucessoSomente) PF('DialogMarca').hide()"
+						/>
+				</p:toolbarGroup>
+			
+				<p:toolbarGroup align="right" rendered="#{not computadorMarcaController.marca.transient}">
+					<p:menuButton icon="fa fa-trash" value="remover?" >
+						<p:menuitem icon="fa fa-trash" value="Sim, remover" 
+							action="#{computadorMarcaController.remover() }"
+							process="@this"
+							oncomplete="if (args.sucessoSomente) PF('DialogMarca').hide()"
+							update="@form :formMarcas"
+							/>
+						<p:menuitem icon="fa fa-close" value="Não" 
+							process="@none" global="false" update="@none"
+							/>
+					</p:menuButton>
+				</p:toolbarGroup>
+
+			</p:toolbar>
+			
+	
+		</h:form>
+	</p:dialog>
+	
+	
+
+	
+</ui:define>
+</ui:decorate>

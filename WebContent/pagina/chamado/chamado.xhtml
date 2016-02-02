@@ -1,0 +1,348 @@
+<!DOCTYPE html > 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:niu="http://java.sun.com/jsf/composite/components"
+      template="/WEB-INF/design/_decorate-chamado.xhtml">
+       
+<ui:define name="content-decorate">
+
+	<p:fieldset legend="Novo Chamado" toggleable="true">
+		<h:form>
+	
+			<h:panelGrid columns="2" cellpadding="5">
+				<p:outputLabel for="inCriadoPor" value="Criado por" styleClass="req" />
+				<h:panelGrid>
+					<p:inputText id="inCriadoPor" value="#{chamadoController.chamado.criadoPor}" size="30" required="true" />
+					<p:message for="inCriadoPor" />
+				</h:panelGrid>
+				
+				<p:outputLabel for="inCat" value="Categoria" styleClass="req" />
+				<h:panelGrid>
+					<p:selectOneMenu id="inCat" value="#{chamadoController.chamado.categoria.id }" required="true" >
+						<f:selectItems value="#{chamadoController.comboCategorias}" var="catVar" 
+							itemValue="#{catVar.id}" itemLabel="#{catVar.nome}" />
+					</p:selectOneMenu>
+					<p:message for="inCat" />
+				</h:panelGrid>
+				
+			
+				<p:outputLabel for="inTitulo" value="Título" styleClass="req" />
+				<h:panelGrid>
+					<p:inputText id="inTitulo" value="#{chamadoController.chamado.titulo}" size="50" required="true" />
+					<p:message for="inTitulo" />
+				</h:panelGrid>
+
+				<p:outputLabel for="inDet" value="Detalhamento" styleClass="req" />
+				<h:panelGrid>
+					<p:inputTextarea id="inDet" value="#{chamadoController.chamado.detalhe }" rows="3" cols="50" required="true" />
+					<p:message for="inDet" />
+				</h:panelGrid>
+	
+				<p:outputLabel for="inPrio" value="Prioridade" styleClass="req" />
+				<h:panelGrid>
+					<p:selectOneButton id="inPrio" value="#{chamadoController.chamado.prioridade}" required="true" >
+						<f:selectItems value="#{enumHelper.chamadoPrioridades}" var="prioVar" 
+							itemValue="#{prioVar}" itemLabel="#{prioVar.descricao}" />
+					</p:selectOneButton>
+					<p:message for="inPrio" />
+				</h:panelGrid>
+
+				<h:panelGroup />
+				<p:commandButton icon="fa fa-plus" value="Criar Chamado" style="font-size:1.4em"
+					action="#{chamadoController.criar() }"
+					update="@form :formChamados" 
+					/>
+					
+			</h:panelGrid>
+			
+			<niu:globalNotification />
+
+		</h:form>
+	</p:fieldset>
+	
+	
+	<p:fieldset legend="Chamados" toggleable="true">
+	
+		<h:form id="formChamados">
+			<p:panel>
+				<h:outputText value="Filtros de pesquisa" styleClass="destak3" />
+				<p:separator />
+
+				<h:panelGrid columns="3" cellpadding="5">
+					<h:panelGrid>
+						<p:outputLabel for="inFiltroCriador" value="Criado Por" />
+						<p:inputText id="inFiltroCriador" value="#{chamadoController.filtroCriadoPor}" size="30" />
+					</h:panelGrid>
+				
+					<h:panelGrid>
+						<p:outputLabel for="inFiltroStatus" value="Status"  />
+						<p:selectManyButton id="inFiltroStatus" value="#{chamadoController.filtrosStatus}"
+							converter="#{chamadoStatusConverter}" >
+							<f:selectItems value="#{enumHelper.chamadoStatus}" var="statusVar" 
+								itemValue="#{statusVar}" itemLabel="#{statusVar.descricao}" 
+								/>
+						</p:selectManyButton>
+					</h:panelGrid>
+					
+					<p:commandButton icon="fa fa-search fa-fw" value="Pesquisar" style="font-size:1.4em"
+						action="#{chamadoController.pesquisar()}"
+						update="@form"
+						/>
+
+				</h:panelGrid>			
+			</p:panel>
+			
+
+			<p:panel>
+				<h:outputText value="Não há chamados" styleClass="warn" 
+					rendered="#{empty chamadoController.chamados}" 
+					/>
+			
+				<p:dataTable value="#{chamadoController.chamados}" var="chamadoVar" rowKey="#{chamadoVar.id}"  
+					rendered="#{not empty chamadoController.chamados}" >
+				
+					<p:column headerText="Número" styleClass="col5p colCenter" sortBy="#{chamadoVar.id}">
+						<h:outputText value="#{chamadoVar.id}" styleClass="destak2" />
+					</p:column>
+		
+					<p:column headerText="Categoria" sortBy="#{chamadoVar.categoria.nome}">
+						<h:outputText value="#{chamadoVar.categoria.nome}" styleClass="destak2" />
+					</p:column>
+		
+					<p:column headerText="Titulo" sortBy="#{chamadoVar.titulo}">
+						<h:outputText value="#{chamadoVar.titulo}" styleClass="destak3" />
+					</p:column>
+	
+					<p:column headerText="Detalhamento" >
+						<h:outputText value="#{chamadoVar.detalhe}" styleClass="less2" />
+					</p:column>
+		
+					<p:column headerText="Prioridade" styleClass="col10p colCenter" sortBy="#{chamadoVar.prioridade}" >
+						<h:outputText value="#{chamadoVar.prioridade}" />
+					</p:column>
+	
+					<p:column headerText="Criado em" styleClass="col10p" sortBy="#{chamadoVar.criadoEm}">
+						<niu:outputTimestamp value="#{chamadoVar.criadoEm}" />
+					</p:column>
+		
+					<p:column headerText="Criado por" styleClass="col10p" sortBy="#{chamadoVar.criadoPor}">
+						<h:outputText value="#{chamadoVar.criadoPor}" />
+					</p:column>
+	
+					<p:column headerText="Status" styleClass="col10p colCenter" sortBy="#{chamadoVar.status}">
+						<niu:displayChamadoStatus value="#{chamadoVar}" />
+					</p:column>
+					
+					<p:column headerText="Responsável" sortBy="#{chamadoVar.responsavel}">
+						<h:outputText value="#{chamadoVar.responsavel}" />
+					</p:column>
+	
+					<p:column styleClass="col10p colCenter">
+						<p:commandButton icon="fa fa-edit" value="Editar"
+							rendered="#{sessionHolder.flagLogado}" 
+							process="@this"
+							action="#{chamadoController.editar(chamadoVar)}"
+							oncomplete="PF('DialogChamado').show()"
+							update=":formChamado"
+							/>
+					</p:column>
+	
+				</p:dataTable>
+
+			</p:panel>
+		</h:form>
+	</p:fieldset>
+
+
+	
+	<p:dialog widgetVar="DialogChamado" header="Chamado" 
+		modal="true" closeOnEscape="true" dynamic="true" 
+		width="80%" >
+	
+		<h:form id="formChamado">
+			<p:panel>
+				<h:outputText value="Dados Gerais" styleClass="destak3" />
+				<p:separator />
+		
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel value="Número:" />
+					<h:outputText value="#{chamadoController.chamado.id}" styleClass="destak3" />
+
+					<p:outputLabel value="Categoria" />
+					<h:outputText value="#{chamadoController.chamado.categoria.nome}" styleClass="destak3" />
+	
+					<p:outputLabel for="inTitulo" value="Título" styleClass="req" />
+					<h:panelGrid>
+						<p:inputText id="inTitulo" value="#{chamadoController.chamado.titulo}" size="50" required="true" />
+						<p:message for="inTitulo" />
+					</h:panelGrid>
+	
+					<p:outputLabel for="inDet" value="Detalhamento" styleClass="req" />
+					<h:panelGrid>
+						<p:inputTextarea id="inDet" value="#{chamadoController.chamado.detalhe }" rows="3" cols="50" required="true" />
+						<p:message for="inDet" />
+					</h:panelGrid>
+		
+					<p:outputLabel for="inPrio" value="Prioridade" styleClass="req" />
+					<h:panelGrid>
+						<p:selectOneButton id="inPrio" value="#{chamadoController.chamado.prioridade}" required="true" >
+							<f:selectItems value="#{enumHelper.chamadoPrioridades}" var="prioVar" 
+								itemValue="#{prioVar}" itemLabel="#{prioVar.descricao}" />
+						</p:selectOneButton>
+						<p:message for="inPrio" />
+					</h:panelGrid>
+					
+					<p:outputLabel for="inResp" value="Responsável" styleClass="req" />
+					<h:panelGrid>
+						<p:selectOneMenu id="inResp" value="#{chamadoController.chamado.responsavel}" required="true">
+							<f:selectItem itemLabel="-- selecione um responsável --" noSelectionOption="true" />
+							<f:selectItems value="#{chamadoController.comboUsuarios}" var="usuarioVar" 
+								itemValue="#{usuarioVar.login}" itemLabel="#{usuarioVar.login}" 
+								/>
+						</p:selectOneMenu>
+						<p:message for="inResp" />
+					</h:panelGrid>
+					
+				</h:panelGrid>
+			</p:panel>
+					
+	
+			<p:panel>	
+				<h:outputText value="Status" styleClass="destak3" />
+				<p:separator />
+			
+				<h:panelGrid columns="5" cellpadding="10" >
+
+					<h:panelGrid>
+						<niu:displayChamadoStatus value="#{chamadoController.chamado}" />
+					</h:panelGrid>				
+	
+					<h:panelGrid columns="2" cellpadding="5" rendered="#{chamadoController.chamado.flagCriado or chamadoController.chamado.flagDevolvido}">
+					
+						<p:commandButton icon="fa fa-flash" value="para Executando" 
+							action="#{chamadoController.paraStatusExecutando}"
+							update="@form :formChamados"
+							/>
+					</h:panelGrid>
+								
+	
+					<h:panelGrid cellpadding="5" rendered="#{chamadoController.chamado.flagExecutando}">
+						<p:commandButton icon="fa fa-eyedropper" value="para Testando" 
+							process="@this"
+							action="#{chamadoController.paraStatusTestando }"
+							update="@form :formChamados"
+							/>
+					</h:panelGrid>			
+	
+	
+					<h:panelGrid cellpadding="5" rendered="#{chamadoController.chamado.flagTestando}">
+						<p:commandButton icon="fa fa-close" value="para Devolvido"  
+							process="@this"
+							action="#{chamadoController.paraStatusDevolvido }"
+							update="@form :formChamados"
+							/>
+					</h:panelGrid>			
+	
+	
+					<h:panelGrid cellpadding="5" rendered="#{chamadoController.chamado.flagTestando}">
+						<p:commandButton icon="fa fa-check" value="para Resolvido" 
+							process="@this"
+							action="#{chamadoController.paraStatusResolvido }"
+							update="@form :formChamados"
+							/>
+					</h:panelGrid>			
+				
+				</h:panelGrid>
+			</p:panel>
+			
+			
+			<p:panel>
+				<h:outputText value="Histórico" styleClass="destak3" />
+				<p:separator />
+			
+				<h:panelGrid columns="5" cellpadding="5">
+				
+					<p:panelGrid columns="2" >
+						<h:outputText value="Criado em" styleClass="less2" />
+						<niu:outputTimestamp value="#{chamadoController.chamado.criadoEm}" styleClass="destak3 less2" />
+					
+						<h:outputText value="Criado por" styleClass="less2" />
+						<h:outputText value="#{chamadoController.chamado.criadoPor}" styleClass="destak3 less2" />
+					</p:panelGrid>
+				
+					<p:panelGrid columns="2" rendered="#{not empty chamadoController.chamado.executandoEm}" >
+						<h:outputText value="Executando em" styleClass="less2" />
+						<niu:outputTimestamp value="#{chamadoController.chamado.executandoEm }" styleClass="destak3 less2" />
+					
+						<h:outputText value="Executando por" styleClass="less2" />
+						<h:outputText value="#{chamadoController.chamado.executandoPor }" styleClass="destak3 less2" />
+					</p:panelGrid>
+
+					<p:panelGrid columns="2" rendered="#{not empty chamadoController.chamado.testandoEm }" >
+						<h:outputText value="Testando em" styleClass="less2" />
+						<niu:outputTimestamp value="#{chamadoController.chamado.testandoEm }" styleClass="destak3 less2" />
+					
+						<h:outputText value="Testando por" styleClass="less2" />
+						<h:outputText value="#{chamadoController.chamado.testandoPor }" styleClass="destak3 less2" />
+					</p:panelGrid>
+
+					<p:panelGrid columns="2" rendered="#{not empty chamadoController.chamado.devolvidoEm }" >
+						<h:outputText value="Devolvido em" styleClass="less2" />
+						<niu:outputTimestamp value="#{chamadoController.chamado.devolvidoEm }" styleClass="destak3 less2" />
+					
+						<h:outputText value="Devolvido por" styleClass="less2" />
+						<h:outputText value="#{chamadoController.chamado.devolvidoPor }" styleClass="destak3 less2" />
+					</p:panelGrid>
+					
+					<p:panelGrid columns="2" rendered="#{not empty chamadoController.chamado.resolvidoEm }" >
+						<h:outputText value="Revolvido em" styleClass="less2" />
+						<niu:outputTimestamp value="#{chamadoController.chamado.resolvidoEm }" styleClass="destak3 less2" />
+					
+						<h:outputText value="Resolvido por" styleClass="less2" />
+						<h:outputText value="#{chamadoController.chamado.resolvidoPor }" styleClass="destak3 less2" />
+					</p:panelGrid>
+					
+				</h:panelGrid>
+			
+			</p:panel>			
+			
+				
+			<niu:globalNotification />
+
+
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton icon="fa fa-check" value="Salvar" style="font-size:1.4em"
+						action="#{chamadoController.salvar()}"
+						update="@form :formChamados"
+						/>
+				</p:toolbarGroup>
+				
+				<p:toolbarGroup align="right"
+					rendered="#{chamadoController.chamado.flagCriado}" >
+					
+					<p:menuButton value="remover?" >
+						<p:menuitem icon="fa fa-trash" value="Sim, remover" 
+							process="@this"
+							action="#{chamadoController.remover()}"
+							update="@form :formChamados"
+							oncomplete="if (args.sucessoSomente) PF('DialogChamado').hide();"
+							/>
+						<p:menuitem icon="fa fa-close" value="Não" 
+							process="@none" global="false" update="@none"
+							/>
+					</p:menuButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+	
+
+		</h:form>
+	</p:dialog>
+	
+
+	
+</ui:define>
+</ui:composition>

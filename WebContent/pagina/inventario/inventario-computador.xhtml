@@ -1,0 +1,180 @@
+<!DOCTYPE html > 
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:niu="http://java.sun.com/jsf/composite/components"
+      template="/WEB-INF/design/_decorate-inventario.xhtml">
+       
+<ui:define name="content-decorate">
+
+	<h:form id="formComputadores">
+		
+		<p:panel>
+		
+			<p:commandButton icon="fa fa-plus" value="Novo" style="font-size:1.3em"
+				process="@this"
+				action="#{inventarioComputadorController.novo()}"
+				oncomplete="PF('DialogComputador').show()"
+				update=":formComputador"
+				/>
+		
+			<niu:globalNotification />
+
+			<p:dataTable value="#{inventarioComputadorController.computadores}" var="computadorVar"
+				emptyMessage="Não há computadores">
+			
+				<p:column headerText="#" styleClass="colCenter col10p">
+					#{computadorVar.id}
+				</p:column>
+			
+				<p:column headerText="Nome Computador">
+					<h:outputText value="#{computadorVar.nomeComputador}" styleClass="destak2" />
+				</p:column>
+				
+				<p:column headerText="Nome Usuário">
+					<h:outputText value="#{computadorVar.nomeUsuario}" />
+				</p:column>
+
+				<p:column headerText="Setor">
+					<h:outputText value="#{computadorVar.setor.nome}" />
+				</p:column>
+
+				<p:column headerText="Marca">
+					<h:outputText value="#{computadorVar.marca.nome}" />
+				</p:column>
+
+				<p:column headerText="Configuração">
+					<h:outputText value="#{computadorVar.configuracao}" />
+				</p:column>
+
+				<p:column headerText="Versão do RM instalada">
+					<h:outputText value="#{computadorVar.versaoRMInstalada}" />
+				</p:column>
+
+				<p:column headerText="RM instalado por">
+					<h:outputText value="#{computadorVar.rmInstaladoPor }" />
+				</p:column>
+
+				<p:column headerText="RM instalado em" styleClass="col10p colCenter">
+					<niu:outputDate value="#{computadorVar.rmInstaladoEm }" />
+				</p:column>
+
+				<p:column styleClass="colCenter col10p">
+					<p:commandButton icon="fa fa-edit" value="Editar" 
+						process="@this"
+						action="#{inventarioComputadorController.editar(computadorVar)}"
+						oncomplete="PF('DialogComputador').show()"
+						update=":formComputador"
+						/>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	
+	
+	
+	<p:dialog widgetVar="DialogComputador" header="Inventário de Computador"
+		modal="true" dynamic="true" closeOnEscape="true"
+		height="50%" width="50%" >
+	
+		<h:form id="formComputador">
+
+			<p:panel>
+
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel for="inNome" value="Nome Computador" styleClass="req" />
+					<h:panelGrid>
+						<p:inputText id="inNome" value="#{inventarioComputadorController.computador.nomeComputador}" size="30" required="true" />
+						<p:message for="inNome" />
+					</h:panelGrid>
+
+					<p:outputLabel for="inNomeUsu" value="Nome Usuário" />
+					<h:panelGrid>
+						<p:inputText id="inNomeUsu" value="#{inventarioComputadorController.computador.nomeUsuario }" size="30" />
+						<p:message for="inNomeUsu" />
+					</h:panelGrid>
+
+					<p:outputLabel for="inSetor" value="Setor" styleClass="req" />
+					<h:panelGrid>
+						<p:selectOneMenu id="inSetor" value="#{inventarioComputadorController.computador.setor.id}" required="true" >
+							<f:selectItems value="#{inventarioComputadorController.comboSetores}" var="setorVar" 
+								itemValue="#{setorVar.id}" itemLabel="#{setorVar.nome}" 
+								/>
+						</p:selectOneMenu>
+						<p:message for="inSetor" />
+					</h:panelGrid>
+
+					<p:outputLabel for="inMarca" value="Marca" styleClass="req" />
+					<h:panelGrid>
+						<p:selectOneMenu id="inMarca" value="#{inventarioComputadorController.computador.marca.id}" required="true" >
+							<f:selectItems value="#{inventarioComputadorController.comboMarcas}" var="marcaVar" 
+								itemValue="#{marcaVar.id}" itemLabel="#{marcaVar.nome}" 
+								/>
+						</p:selectOneMenu>
+						<p:message for="inMarca" />
+					</h:panelGrid>
+					
+					<p:outputLabel for="inConfig" value="Configuração" styleClass="req" />
+					<h:panelGrid>
+						<p:inputText id="inConfig" value="#{inventarioComputadorController.computador.configuracao }" size="40" required="true" />
+						<p:message for="inConfig" />
+					</h:panelGrid>
+					
+					<p:outputLabel for="inVersaoRM" value="Versão RM Instalada" />
+					<h:panelGrid>
+						<p:inputText id="inVersaoRM" value="#{inventarioComputadorController.computador.versaoRMInstalada }" size="20" />
+						<p:message for="inVersaoRM" />
+					</h:panelGrid>
+
+					<p:outputLabel for="inRMInstalPor" value="RM Instalada Por" />
+					<h:panelGrid>
+						<p:inputText id="inRMInstalPor" value="#{inventarioComputadorController.computador.rmInstaladoPor }" size="30" />
+						<p:message for="inRMInstalPor" />
+					</h:panelGrid>
+
+					<p:outputLabel for="inRMInstalEm" value="RM Instalada Em" />
+					<h:panelGrid>
+						<p:calendar id="inRMInstalEm" value="#{inventarioComputadorController.computador.rmInstaladoEm }" size="10" 
+							navigator="true" />
+						<p:message for="inRMInstalEm" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+			</p:panel>
+			
+			<niu:globalNotification />
+			
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton icon="fa fa-check" value="Salvar" style="font-size:1.3em"
+						action="#{inventarioComputadorController.salvar() }"
+						update="@form :formComputadores"
+						oncomplete="if (args.sucessoSomente) PF('DialogComputador').hide()"
+						/>
+				</p:toolbarGroup>
+			
+				<p:toolbarGroup align="right" rendered="#{not inventarioComputadorController.computador.transient}">
+					<p:menuButton icon="fa fa-trash" value="remover?" >
+						<p:menuitem icon="fa fa-trash" value="Sim, remover" 
+							action="#{inventarioComputadorController.remover() }"
+							process="@this"
+							oncomplete="if (args.sucessoSomente) PF('DialogComputador').hide()"
+							update="@form :formComputadores"
+							/>
+						<p:menuitem icon="fa fa-close" value="Não" 
+							process="@none" global="false" update="@none"
+							/>
+					</p:menuButton>
+				</p:toolbarGroup>
+
+			</p:toolbar>
+			
+	
+		</h:form>
+	</p:dialog>
+	
+	
+</ui:define>
+</ui:decorate>

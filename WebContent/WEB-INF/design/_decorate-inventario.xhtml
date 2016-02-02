@@ -1,0 +1,34 @@
+<!DOCTYPE html > 
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:niu="http://java.sun.com/jsf/composite/components"
+      template="/WEB-INF/design/_template-main.xhtml">
+       
+<ui:define name="title">Inventário</ui:define>       
+       
+<ui:define name="content">
+
+	<p:tabMenu activeIndex="#{param.idxIvt}">
+		<p:menuitem icon="fa fa-laptop" value="Computadores" outcome="/pagina/inventario/inventario-computador.xhtml">
+			<f:param name="idxIvt" value="0" />
+		</p:menuitem>
+	
+
+	</p:tabMenu>
+	
+	
+	<h:panelGrid cellpadding="10" width="100%">
+
+		<ui:insert name="content-decorate">
+			<!-- conteudo decorado aqui... -->
+		</ui:insert>
+
+	</h:panelGrid>
+
+	
+</ui:define>
+
+</ui:decorate>

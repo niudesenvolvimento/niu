@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd">
+
+
+	<!-- Usuario -->
+	<named-query name="buscarUsuarioPeloLoginESenha">
+		<query>
+			select u
+			from UsuarioNIU u
+			where u.senha = :pSenha
+			and   u.login = :pLogin
+		</query>
+	</named-query>
+	
+	<named-query name="buscarUsuarioNIUPeloLogin">
+		<query>
+			select u
+			from UsuarioNIU u
+			where u.login = :pLogin
+		</query>
+	</named-query>
+	
+	<named-query name="pesquisarChamadoPelaCategoria">
+		<query>
+			select c
+			from Chamado c
+			where c.categoria = :pCategoria
+			order by c.titulo
+		</query>
+	</named-query>
+	
+	
+	<!-- Categoria -->
+	<named-query name="pesquisarChamadoCategoria">
+		<query>
+			select c
+			from ChamadoCategoria c
+			order by c.nome
+		</query>
+	</named-query>
+	
+	<named-query name="buscarChamadoCategoriaPeloNome">
+		<query>
+			select cat
+			from ChamadoCategoria cat
+			where cat.nome = :pNome
+			order by cat.nome
+		</query>
+	</named-query>
+	
+	<named-query name="pesquisarChamadoCategoriaPeloFlagAtivo">
+		<query>
+			select cat
+			from ChamadoCategoria cat
+			where cat.flagAtivo = :pFlagAtivo
+			order by cat.nome
+		</query>
+	</named-query>
+	
+	
+	<!-- Setor -->
+	<named-query name="buscarSetorPeloNome">
+		<query>
+			select s
+			from Setor s
+			where s.nome = :pNome
+		</query>
+	</named-query>
+	
+	<named-query name="pesquisarSetor">
+		<query>
+			select s
+			from Setor s
+			order by s.nome
+		</query>
+	</named-query>
+	
+	<named-query name="pesquisarSetorPeloFlagAtivo">
+		<query>
+			select s
+			from Setor s
+			where s.flagAtivo = :pFlagAtivo
+			order by s.nome
+		</query>
+	</named-query>
+	
+	
+	<!-- Computador Marca -->
+	<named-query name="buscarComputadorMarcaPeloNome">
+		<query>
+			select m
+			from ComputadorMarca m
+			where m.nome = :pNome
+		</query>
+	</named-query>
+	
+	<named-query name="pesquisarComputadorMarca">
+		<query>
+			select m
+			from ComputadorMarca m
+			order by m.nome
+		</query>
+	</named-query>
+	
+	<named-query name="pesquisarComputadorMarcaPeloFlagAtivo">
+		<query>
+			select m
+			from ComputadorMarca m
+			where m.flagAtivo = :pFlagAtivo
+			order by m.nome
+		</query>
+	</named-query>
+	
+	
+	<!-- Inventario de Computadores -->
+	<named-query name="buscarInventarioComputadorPeloNomeComputador">
+		<query>
+			select c
+			from InventarioComputador c
+			where c.nomeComputador = :pNomeComputador
+		</query>
+	</named-query>
+	
+	<named-query name="pesquisarInventarioComputador">
+		<query>
+			select c
+			from InventarioComputador c
+			order by c.nomeComputador
+		</query>
+	</named-query>
+	
+	
+	<!-- BC Tutorial -->
+	<named-query name="buscarTutorialPeloTitulo">
+		<query>
+			select t
+			from BCTutorial t
+			where t.titulo = :pTitulo
+		</query>
+	</named-query>
+	
+	
+	<!-- BC Manual -->
+	<named-query name="buscarManualPeloTitulo">
+		<query>
+			select m
+			from BCManual m
+			where m.titulo = :pTitulo
+		</query>
+	</named-query>
+
+
+</entity-mappings>
