@@ -1,3 +1,4 @@
+
 <!DOCTYPE html > 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -37,7 +38,9 @@
 
 				<p:outputLabel for="inDet" value="Detalhamento" styleClass="req" />
 				<h:panelGrid>
-					<p:inputTextarea id="inDet" value="#{chamadoController.chamado.detalhe }" rows="3" cols="50" required="true" />
+					<p:inputTextarea id="inDet" value="#{chamadoController.chamado.detalhe }" rows="3" cols="80" required="true" 
+						maxlength="5000" counter="displayRestantes" counterTemplate="{0} restantes"  />
+					<h:outputText id="displayRestantes" styleClass="less2" />
 					<p:message for="inDet" />
 				</h:panelGrid>
 	
@@ -182,7 +185,9 @@
 	
 					<p:outputLabel for="inDet" value="Detalhamento" styleClass="req" />
 					<h:panelGrid>
-						<p:inputTextarea id="inDet" value="#{chamadoController.chamado.detalhe }" rows="3" cols="50" required="true" />
+						<p:inputTextarea id="inDet" value="#{chamadoController.chamado.detalhe }" rows="3" cols="80" required="true"
+							maxlength="5000" counter="displayRestantes" counterTemplate="{0} restantes"  />
+						<h:outputText id="displayRestantes" styleClass="less2" />
 						<p:message for="inDet" />
 					</h:panelGrid>
 		

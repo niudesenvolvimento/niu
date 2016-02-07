@@ -15,6 +15,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import br.edu.uniplac.niu.model.entity.enumeration.ChamadoPrioridade;
 import br.edu.uniplac.niu.model.entity.enumeration.ChamadoStatus;
@@ -37,6 +38,7 @@ public class Chamado implements Serializable {
 	
 	
 	@NotNull
+	@Size(max=5000)
 	private String detalhe;
 	
 
