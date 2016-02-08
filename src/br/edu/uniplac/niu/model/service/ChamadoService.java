@@ -50,7 +50,10 @@ public class ChamadoService {
 	 * @param filtrosStatus
 	 * @return
 	 */
-	public List<Chamado> pesquisarChamadoPeloCriadoPorEStatus(String filtroCriadoPor, List<ChamadoStatus> filtrosStatus) {
+	public List<Chamado> pesquisarChamadoPeloCriadoPorEStatus(String filtroCriadoPor
+															, List<ChamadoStatus> filtrosStatus
+															, String filtroResponsavel
+															, List<ChamadoCategoria> filtroCategorias) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Chamado> criteria = builder.createQuery(Chamado.class);
 		Root<Chamado> root = criteria.from(Chamado.class);
@@ -58,14 +61,26 @@ public class ChamadoService {
 		Predicate conjunction = builder.conjunction();
 		//criado por
 		if (isNotBlank(filtroCriadoPor)) {
-			conjunction = builder.and(conjunction, 
-					builder.like( root.<String>get("criadoPor"), toLikeMatchModeANY(filtroCriadoPor))
+			conjunction = builder.and(conjunction
+					,builder.like( root.<String>get("criadoPor"), toLikeMatchModeANY(filtroCriadoPor))
 					);
 		}
 		//status
 		if (isNotEmpty(filtrosStatus) ) {
-			conjunction = builder.and(conjunction,
-					root.<ChamadoStatus>get("status").in(filtrosStatus)
+			conjunction = builder.and(conjunction
+					,root.<ChamadoStatus>get("status").in(filtrosStatus)
+					);
+		}
+		//responsavel
+		if (isNotBlank(filtroResponsavel)) {
+			conjunction = builder.and(conjunction
+					, builder.like(root.<String>get("responsavel"), toLikeMatchModeANY(filtroResponsavel))
+					);
+		}
+		//categorias
+		if (isNotEmpty(filtroCategorias)) {
+			conjunction = builder.and(conjunction
+					,root.<ChamadoCategoria>get("categoria").in( filtroCategorias )
 					);
 		}
 		
@@ -161,6 +176,10 @@ public class ChamadoService {
 		}
 	}
 
+	
+	public ChamadoCategoria buscarChamadoCategoriaPeloId(Integer id) {
+		return manager.find(ChamadoCategoria.class, id);
+	}
 	
 	
 	public ChamadoCategoria buscarChamadoCategoriaPeloNome(String nome) {

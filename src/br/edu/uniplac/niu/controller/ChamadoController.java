@@ -53,6 +53,8 @@ public class ChamadoController implements Serializable {
 	//filtros pesquisa
 	private String filtroCriadoPor;
 	private List<ChamadoStatus> filtrosStatus;
+	private String filtroResponsavel;
+	private List<ChamadoCategoria> filtroCategorias;
 	
 	
 	
@@ -77,11 +79,13 @@ public class ChamadoController implements Serializable {
 		} else {
 			filtroCriadoPor = recuperarCriadoPorUsandoCookie();
 		}
-		
 	}
 	
 	private void popularChamados() {
-		chamados = service.pesquisarChamadoPeloCriadoPorEStatus(filtroCriadoPor, filtrosStatus);
+		chamados = service.pesquisarChamadoPeloCriadoPorEStatus(filtroCriadoPor
+															  , filtrosStatus
+															  , filtroResponsavel
+															  , filtroCategorias);
 	}
 	
 	private void popularComboUsuariosInformatica() {
@@ -228,5 +232,16 @@ public class ChamadoController implements Serializable {
 	public List<ChamadoCategoria> getComboCategorias() {
 		return comboCategorias;
 	}
-	
+	public String getFiltroResponsavel() {
+		return filtroResponsavel;
+	}
+	public void setFiltroResponsavel(String filtroResponsavel) {
+		this.filtroResponsavel = filtroResponsavel;
+	}
+	public List<ChamadoCategoria> getFiltroCategorias() {
+		return filtroCategorias;
+	}
+	public void setFiltroCategorias(List<ChamadoCategoria> filtroCategorias) {
+		this.filtroCategorias = filtroCategorias;
+	}
 }

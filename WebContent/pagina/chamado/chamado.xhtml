@@ -74,7 +74,7 @@
 				<h:outputText value="Filtros de pesquisa" styleClass="destak3" />
 				<p:separator />
 
-				<h:panelGrid columns="3" cellpadding="5">
+				<h:panelGrid columns="5" cellpadding="5">
 					<h:panelGrid>
 						<p:outputLabel for="inFiltroCriador" value="Criado Por" />
 						<p:inputText id="inFiltroCriador" value="#{chamadoController.filtroCriadoPor}" size="30" />
@@ -89,12 +89,30 @@
 								/>
 						</p:selectManyButton>
 					</h:panelGrid>
-					
-					<p:commandButton icon="fa fa-search fa-fw" value="Pesquisar" style="font-size:1.4em"
+
+					<h:panelGrid>
+						<p:outputLabel for="inFiltroResp" value="Responsável" />
+						<p:selectOneMenu id="inFiltroResp" value="#{chamadoController.filtroResponsavel}" >
+							<f:selectItem itemLabel="--" noSelectionOption="true" />
+							<f:selectItems value="#{chamadoController.comboUsuarios}" var="respvar" 
+								itemValue="#{respvar.login}" itemLabel="#{respvar.login}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid>
+						<p:outputLabel for="inFiltroCat" value="Categorias" />
+						<p:selectCheckboxMenu id="inFiltroCat" value="#{chamadoController.filtroCategorias }"
+							converter="#{chamadoCategoriaConverter}" >
+							<f:selectItems value="#{chamadoController.comboCategorias }" var="catVar" 
+								itemValue="#{catVar}" itemLabel="#{catVar.nome}" />
+						</p:selectCheckboxMenu>
+					</h:panelGrid>
+
+					<p:commandButton icon="fa fa-search fa-fw" value="Pesquisar" style="font-size:1.3em"
 						action="#{chamadoController.pesquisar()}"
 						update="@form"
 						/>
-
+					
 				</h:panelGrid>			
 			</p:panel>
 			
@@ -203,7 +221,7 @@
 					<p:outputLabel for="inResp" value="Responsável" styleClass="req" />
 					<h:panelGrid>
 						<p:selectOneMenu id="inResp" value="#{chamadoController.chamado.responsavel}" required="true">
-							<f:selectItem itemLabel="-- selecione um responsável --" noSelectionOption="true" />
+							<f:selectItem itemLabel="-- selecione um --" noSelectionOption="true" />
 							<f:selectItems value="#{chamadoController.comboUsuarios}" var="usuarioVar" 
 								itemValue="#{usuarioVar.login}" itemLabel="#{usuarioVar.login}" 
 								/>
