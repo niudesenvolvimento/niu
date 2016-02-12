@@ -50,7 +50,8 @@ public class ChamadoService {
 	 * @param filtrosStatus
 	 * @return
 	 */
-	public List<Chamado> pesquisarChamadoPeloCriadoPorEStatus(String filtroCriadoPor
+	public List<Chamado> pesquisarChamadoPeloCriadoPorEStatus(Integer filtroId
+			                                                , String filtroCriadoPor
 															, List<ChamadoStatus> filtrosStatus
 															, String filtroResponsavel
 															, List<ChamadoCategoria> filtroCategorias) {
@@ -59,6 +60,12 @@ public class ChamadoService {
 		Root<Chamado> root = criteria.from(Chamado.class);
 		
 		Predicate conjunction = builder.conjunction();
+		//id
+		if (isNotNegative(filtroId)) {
+			conjunction = builder.and(conjunction
+					,builder.equal( root.<Integer>get("id"), filtroId)
+					);
+		}
 		//criado por
 		if (isNotBlank(filtroCriadoPor)) {
 			conjunction = builder.and(conjunction

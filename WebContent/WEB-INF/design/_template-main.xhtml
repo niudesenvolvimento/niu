@@ -62,6 +62,17 @@
 			
 		</p:panel>
 	</div>
+	
+	
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+		<h:panelGrid columns="2" cellpadding="10">
+		    <p:graphicImage library="img" name="animado_bar_180.gif" />
+			<h:outputText value="Processando..." />		
+		</h:panelGrid>
+	</p:dialog>	
+	
 
 </h:body>
 

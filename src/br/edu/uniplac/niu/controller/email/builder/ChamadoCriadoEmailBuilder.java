@@ -33,7 +33,7 @@ public class ChamadoCriadoEmailBuilder extends EnhancedEmailBuilder {
 	
 	
 	private void handleEmailSubject(Chamado chamado) {
-		this.emailSubject = String.format("[NIUGov] Novo Chamado ID=%s : %s", String.valueOf(chamado.getId()), chamado.getTitulo() );
+		this.emailSubject = String.format("[NIUGov] Novo Chamado #%s: %s", String.valueOf(chamado.getId()), chamado.getTitulo() );
 	}
 
 	

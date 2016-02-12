@@ -184,7 +184,7 @@ public class JavaMailSender {
 			InternetAddress[] array = new InternetAddress[ emails.size() ];
 			int i=0;
 			for (String email : emails ) {
-				array[i++] = new InternetAddress(email, String.format("Responsavel %d", i) );
+				array[i++] = new InternetAddress(email, getFirstPartOf(email) );
 			}
 			return array;
 		}

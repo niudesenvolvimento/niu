@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<meta charset="UTF-8">
 <head>
 	<style type="text/css">
 		body {
@@ -26,17 +25,21 @@
 			color: #fff;
 			font-weight: bold;
 			background-color: #009;
+			width: 15%;
 		}
 		#cellData {
 			background-color: #ff8;
+			width: 85%;
 		}
 		#t1 {
 			font-size: 1.5em;
 			font-weight: bold;
+			padding: 20px;
 		}
 		#t2 {
 			font-size: 1.5em;
 			font-weight: bold;
+			padding: 20px;
 		}
 	</style>
 </head>
@@ -45,16 +48,18 @@
 	<div id="container">
 		<div id="content">
 
-			<div style="background-color: #dde;padding: 10px">
-				<img src="http://uni-srv-web01:8080/niu/resources/img/logo_uniplac_64.png" />
-				<span id="t1">NIU Governança</span>
+			<div style="padding: 20px; text-align: center">
+				<div>
+					<img src="http://uni-srv-web01:8080/niu/javax.faces.resource/logo_uniplac_64.png.xhtml?ln=img"	alt="" />
+				</div>
+				<div>
+					<span id="t1">NIU Gov</span>
+				</div>
 			</div>
-
 
 			<hr id="sep" />
 
-
-			<span id="t2">Novo Chamado</span>
+			<span id="t2">Novo Chamado #@ID@</span>
 
 			<table cellspacing="5" cellpadding="5" width="100%">
 				<tr>
@@ -62,7 +67,7 @@
 					<td id="cellData">@ID@</td>
 				</tr>
 				<tr>
-					<td id="cellHeader">Título</td>
+					<td id="cellHeader">Titulo</td>
 					<td id="cellData">@TITULO@</td>
 				</tr>
 				<tr>

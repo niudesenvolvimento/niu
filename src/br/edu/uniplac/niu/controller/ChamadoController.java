@@ -53,10 +53,12 @@ public class ChamadoController implements Serializable {
 	
 	//combos
 	private List<UsuarioNIU> comboUsuarios;
+	private List<UsuarioNIU> comboUsuariosResponsaveis;//segundo a categoria
 	private List<ChamadoCategoria> comboCategorias;
 	
 	
 	//filtros pesquisa
+	private Integer filtroId;
 	private String filtroCriadoPor;
 	private List<ChamadoStatus> filtrosStatus;
 	private String filtroResponsavel;
@@ -88,7 +90,8 @@ public class ChamadoController implements Serializable {
 	}
 	
 	private void popularChamados() {
-		chamados = service.pesquisarChamadoPeloCriadoPorEStatus(filtroCriadoPor
+		chamados = service.pesquisarChamadoPeloCriadoPorEStatus(filtroId
+							                                  , filtroCriadoPor
 															  , filtrosStatus
 															  , filtroResponsavel
 															  , filtroCategorias);
@@ -101,6 +104,11 @@ public class ChamadoController implements Serializable {
 	private void popularComboCategorias() {
 		comboCategorias = service.pesquisarChamadoCategoriaPeloFlagAtivo(true);
 	}
+	
+	private void popularComboResponsaveisPelaCategoria(ChamadoCategoria categoria) {
+		comboUsuariosResponsaveis = usuarioService.pesquisarUsuarioPelaCategoria(categoria);
+	}
+	
 	
 	
 	
@@ -140,8 +148,13 @@ public class ChamadoController implements Serializable {
 	
 	public void editar(Chamado chamadoSelecionado) {
 		this.chamado = chamadoSelecionado;
+		popularComboResponsaveisPelaCategoria( chamado.getCategoria() );
 	}
 	
+
+
+
+
 
 	public void remover() {
 		service.removerChamado(chamado);
@@ -154,8 +167,6 @@ public class ChamadoController implements Serializable {
 	private void enviarEmailAosResponsaveis() {
 		List<UsuarioNIU> emailResponsaveis = getUsuariosResponsaveis(); 
 		EnhancedEmailBuilder builder = new ChamadoCriadoEmailBuilder(emailResponsaveis, chamado);
-		
-		System.out.println( builder.getEmailBody() );
 		emailService.sendEmail(builder);
 	}
 	
@@ -235,8 +246,8 @@ public class ChamadoController implements Serializable {
 	public void setSessionHolder(SessionHolder sessionHolder) {
 		this.sessionHolder = sessionHolder;
 	}
-	public List<UsuarioNIU> getComboUsuarios() {
-		return comboUsuarios;
+	public List<UsuarioNIU> getComboUsuariosResponsaveis() {
+		return comboUsuariosResponsaveis;
 	}
 	public String getFiltroCriadoPor() {
 		return filtroCriadoPor;
@@ -264,5 +275,14 @@ public class ChamadoController implements Serializable {
 	}
 	public void setFiltroCategorias(List<ChamadoCategoria> filtroCategorias) {
 		this.filtroCategorias = filtroCategorias;
+	}
+	public Integer getFiltroId() {
+		return filtroId;
+	}
+	public void setFiltroId(Integer filtroId) {
+		this.filtroId = filtroId;
+	}
+	public List<UsuarioNIU> getComboUsuarios() {
+		return comboUsuarios;
 	}
 }
