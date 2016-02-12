@@ -1,6 +1,7 @@
 package br.edu.uniplac.niu.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,9 +12,11 @@ import javax.faces.bean.ViewScoped;
 
 import br.edu.uniplac.niu.controller.holder.SessionHolder;
 import br.edu.uniplac.niu.controller.util.JSFUtil;
+import br.edu.uniplac.niu.model.entity.ChamadoCategoria;
 import br.edu.uniplac.niu.model.entity.UsuarioNIU;
 import br.edu.uniplac.niu.model.entity.enumeration.UsuarioPerfil;
 import br.edu.uniplac.niu.model.exception.NegocioException;
+import br.edu.uniplac.niu.model.service.ChamadoService;
 import br.edu.uniplac.niu.model.service.UsuarioService;
 
 /**
@@ -26,6 +29,7 @@ import br.edu.uniplac.niu.model.service.UsuarioService;
 public class UsuarioController implements Serializable {
 	
 	@EJB UsuarioService usuarioService;
+	@EJB ChamadoService chamadoService;
 	
 	@ManagedProperty("#{sessionHolder}")
 	private SessionHolder sessionHolder;
@@ -39,6 +43,9 @@ public class UsuarioController implements Serializable {
 	private String senha1;
 	private String senha2;
 	
+	//combos
+	private List<ChamadoCategoria> comboCategorias;
+	
 
 
 	//filtros
@@ -46,8 +53,14 @@ public class UsuarioController implements Serializable {
 	private UsuarioPerfil filtroPerfil;
 	
 	
+	//inits...
 	@PostConstruct void init() {
-		popularUsuarios();
+		popularComboCategorias();
+	}
+
+
+	private void popularComboCategorias() {
+		comboCategorias = chamadoService.pesquisarChamadoCategoriaPeloFlagAtivo( true );
 	}
 
 
@@ -56,21 +69,28 @@ public class UsuarioController implements Serializable {
 	}
 	
 	
-	public void novo() {
-		usuario = new UsuarioNIU();
+	//actions...
+	public void pesquisar() {
+		popularUsuarios();
+		JSFUtil.addMessageAboutResult(usuarios);
 	}
 	
 	
+	public void novo() {
+		usuario = new UsuarioNIU();
+	}
 
 
 	public void salvar() {
 		usuario = usuarioService.salvarUsuarioNIU(usuario, getLoginUsuarioLogado() );
+		carregarUsuario();
 		popularUsuarios();
 		JSFUtil.addInfoMessage("Usuário salvo com sucesso");
 	}
 	
 	public void editar(UsuarioNIU usuarioSelecionado) {
 		this.usuario = usuarioSelecionado;
+		carregarUsuario();
 	}
 	
 	
@@ -102,6 +122,13 @@ public class UsuarioController implements Serializable {
 		} else {
 			return sessionHolder.getUsuario().getLogin();
 		}
+	}
+	
+	private void carregarUsuario() {
+		usuario = usuarioService.carregarUsuario(usuario);
+		//workarround para transformar PersistBag em ArrayList
+		List<ChamadoCategoria> categoriasAux = new ArrayList<>( usuario.getCategorias() );
+		usuario.setCategorias( categoriasAux );
 	}
 	
 	
@@ -142,6 +169,9 @@ public class UsuarioController implements Serializable {
 	}
 	public void setSessionHolder(SessionHolder sessionHolder) {
 		this.sessionHolder = sessionHolder;
+	}
+	public List<ChamadoCategoria> getComboCategorias() {
+		return comboCategorias;
 	}
 
 	

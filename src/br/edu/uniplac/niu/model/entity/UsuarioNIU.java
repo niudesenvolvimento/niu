@@ -2,6 +2,8 @@ package br.edu.uniplac.niu.model.entity;
 
 import java.io.Serializable;
 
+import java.util.List;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +11,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,10 +38,25 @@ public class UsuarioNIU implements Serializable {
 
 	@Size(max=500)
 	private String senha;
+	
+	
+	@Size(max=100)
+	private String email;
 
 
 	@Enumerated(EnumType.STRING)
 	private UsuarioPerfil perfil = UsuarioPerfil.FUN;
+	
+	
+	/**
+	 * Categorias cujos chamados o usuario (INFORMATICA) pode atender
+	 */
+	@ManyToMany
+	@JoinTable(name="usuario_x_categoria"
+		, joinColumns=@JoinColumn(name="usuario_id")
+		, inverseJoinColumns=@JoinColumn(name="categoria_id")
+		)
+	private List<ChamadoCategoria> categorias;
 	
 	
 	private Boolean flagAtivo = true;
@@ -63,6 +83,22 @@ public class UsuarioNIU implements Serializable {
 			infoLog=new InfoLog();
 		}
 		return infoLog;
+	}
+
+	public List<ChamadoCategoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<ChamadoCategoria> categorias) {
+		this.categorias = categorias;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Boolean getFlagAtivo() {

@@ -4,6 +4,7 @@ import static br.edu.uniplac.niu.model.util.QueryUtil.isNotBlank;
 import static br.edu.uniplac.niu.model.util.QueryUtil.isNotNull;
 import static br.edu.uniplac.niu.model.util.QueryUtil.toLikeMatchModeANY;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import br.edu.uniplac.niu.model.entity.ChamadoCategoria;
 import br.edu.uniplac.niu.model.entity.UsuarioNIU;
 import br.edu.uniplac.niu.model.entity.enumeration.UsuarioPerfil;
 import br.edu.uniplac.niu.model.exception.NegocioException;
@@ -86,6 +88,21 @@ public class UsuarioService {
 	}
 	
 	
+
+	/**
+	 * Recarrega usuario com as categorias
+	 * Workarround para evitar LIE
+	 * @param usuario
+	 * @return
+	 */
+	public UsuarioNIU carregarUsuario(UsuarioNIU usuario) {
+		//1.traz para gerenciado
+		usuario = manager.find(UsuarioNIU.class, usuario.getId() );
+		//2.força carga
+		usuario.getCategorias().size();
+		//3.retorna
+		return usuario;
+	}
 	
 	
 	/**
@@ -134,7 +151,7 @@ public class UsuarioService {
 		Root<UsuarioNIU> root = criteria.from(UsuarioNIU.class);
 		
 		Predicate conjunction = builder.conjunction();
-		//1.email
+		//1.login
 		if (isNotBlank(login)) {
 			conjunction = builder.and(conjunction, 
 					builder.like(root.<String>get("login"), toLikeMatchModeANY(login))
@@ -150,6 +167,22 @@ public class UsuarioService {
 		criteria.orderBy( builder.asc(root.<String>get("login")) );
 		return manager.createQuery(criteria).getResultList();
 	}
+	
+	
+	
+	/**
+	 * Pesquisa Usuario pela categoria
+	 * (para enviar email sempre que um chamado é criado)
+	 * @param categoria
+	 * @return
+	 */
+	public List<UsuarioNIU> pesquisarUsuarioPelaCategoria(ChamadoCategoria categoria) {
+		return manager.createNamedQuery("pesquisarUsuarioPelaCategoria", UsuarioNIU.class)
+				.setParameter("pCategoria", categoria)
+				.getResultList();
+	}
+
+
 	
 	
 }

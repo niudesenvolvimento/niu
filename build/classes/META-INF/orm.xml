@@ -31,6 +31,16 @@
 		</query>
 	</named-query>
 	
+	<named-query name="pesquisarUsuarioPelaCategoria">
+		<query>
+			select u
+			from UsuarioNIU u
+				join u.categorias c
+			where c = :pCategoria
+			order by u.login
+		</query>
+	</named-query>
+	
 	
 	<!-- Categoria -->
 	<named-query name="pesquisarChamadoCategoria">

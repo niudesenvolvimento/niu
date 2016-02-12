@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import br.edu.uniplac.niu.controller.email.builder.ChamadoCriadoEmailBuilder;
 import br.edu.uniplac.niu.controller.holder.SessionHolder;
 import br.edu.uniplac.niu.controller.util.CookieUtil;
 import br.edu.uniplac.niu.controller.util.JSFUtil;
@@ -19,6 +20,8 @@ import br.edu.uniplac.niu.model.entity.enumeration.ChamadoStatus;
 import br.edu.uniplac.niu.model.entity.enumeration.UsuarioPerfil;
 import br.edu.uniplac.niu.model.service.ChamadoService;
 import br.edu.uniplac.niu.model.service.UsuarioService;
+import br.edu.uniplac.niu.model.service.email.EmailService;
+import br.edu.uniplac.niu.model.service.email.builder.EnhancedEmailBuilder;
 
 /**
  * Controller para Gerenciar Chamados
@@ -29,10 +32,13 @@ import br.edu.uniplac.niu.model.service.UsuarioService;
 @ViewScoped
 public class ChamadoController implements Serializable {
 	
-	
 	@EJB ChamadoService service;
 	
 	@EJB UsuarioService usuarioService;
+	
+	@EJB EmailService emailService;
+	
+	
 	
 	
 	
@@ -117,6 +123,7 @@ public class ChamadoController implements Serializable {
 	
 	public void criar() {
 		chamado = service.salvarChamado(chamado);
+		enviarEmailAosResponsaveis();
 		guardarCriadorComoCookie();
 		novo();
 		popularChamados();
@@ -142,6 +149,20 @@ public class ChamadoController implements Serializable {
 		JSFUtil.addInfoMessage("Chamado removido");
 	}
 
+	
+	//envio de email
+	private void enviarEmailAosResponsaveis() {
+		List<UsuarioNIU> emailResponsaveis = getUsuariosResponsaveis(); 
+		EnhancedEmailBuilder builder = new ChamadoCriadoEmailBuilder(emailResponsaveis, chamado);
+		
+		System.out.println( builder.getEmailBody() );
+		emailService.sendEmail(builder);
+	}
+	
+	private List<UsuarioNIU> getUsuariosResponsaveis() {
+		return usuarioService.pesquisarUsuarioPelaCategoria( chamado.getCategoria() );
+	}
+	
 
 	
 	//transição de status

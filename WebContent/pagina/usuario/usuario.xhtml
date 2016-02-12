@@ -12,6 +12,34 @@
 <ui:define name="content">
 
 	<p:panel>
+		<h:outputText value="Filtros de pesquisa" styleClass="destak3" />
+		<p:separator />
+		
+		<h:form id="formPesquisa">
+			<h:panelGrid columns="3" cellpadding="5">
+				<h:panelGrid>
+					<h:outputText value="Perfil" />
+					<p:selectOneMenu value="#{usuarioController.filtroPerfil}" >
+						<f:selectItem itemLabel="-- TODOS --" noSelectionOption="true" />
+						<f:selectItems value="#{enumHelper.perfis}" var="perfilVar" 
+							itemValue="#{perfilVar}" itemLabel="#{perfilVar.descricao}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+			
+				<h:panelGrid>
+					<h:outputText value="Login" />
+					<p:inputText value="#{usuarioController.filtroLogin }" size="30" />
+				</h:panelGrid>
+				
+				<p:commandButton icon="fa fa-search" value="Pesquisar" style="font-size:1.3em"
+					action="#{usuarioController.pesquisar() }"
+					update=":formUsuarios" />
+	
+			</h:panelGrid>
+		</h:form>
+	</p:panel>
+
+	<p:panel>
 		<h:form id="formUsuarios">
 		
 			<p:commandButton icon="fa fa-plus" value="Novo" style="font-size:1.3em" 
@@ -30,6 +58,10 @@
 					<h:outputText value="#{usuarioVar.login}" styleClass="destak3" />
 				</p:column>
 				
+				<p:column headerText="Email" sortBy="#{usuarioVar.email}">
+					<h:outputText value="#{usuarioVar.email}" />
+				</p:column>
+
 				<p:column headerText="Perfil" sortBy="#{usuarioVar.perfil}">
 					<h:outputText value="#{usuarioVar.perfil.descricao}" />
 				</p:column>
@@ -77,33 +109,59 @@
 				
 					<h:form>
 						<p:panel>
-							<h:panelGrid columns="2" cellpadding="5">
+						
+							<h:panelGrid columns="2" cellpadding="10">
 							
-								<p:outputLabel for="inLogin" value="Login" styleClass="req" />
-								<h:panelGrid>
-									<p:inputText id="inLogin" value="#{usuarioController.usuario.login}" required="true" />
-									<p:message for="inLogin" />
+								<h:panelGrid cellpadding="5">
+									<h:panelGrid>
+										<p:outputLabel for="inLogin" value="Login" styleClass="req" />
+										<p:inputText id="inLogin" value="#{usuarioController.usuario.login}" required="true" size="20" />
+										<p:message for="inLogin" />
+									</h:panelGrid>
+									
+									<h:panelGrid>
+										<p:outputLabel for="inEmail" value="Email" styleClass="req" />
+										<p:inputText id="inEmail" value="#{usuarioController.usuario.email}" required="true" size="60" />
+										<p:message for="inEmail" />
+									</h:panelGrid>
+
+									<h:panelGrid>
+										<p:outputLabel for="inPerfil" value="Perfil" styleClass="req" />
+										<p:selectOneMenu id="inPerfil" value="#{usuarioController.usuario.perfil}" required="true">
+											<f:selectItems value="#{enumHelper.perfis}" var="perfilVar" 
+												itemValue="#{perfilVar}" itemLabel="#{perfilVar.descricao}"
+												/>
+											<p:ajax update="inCat" global="false" />
+										</p:selectOneMenu> 
+										<p:message for="inPerfil" />
+									</h:panelGrid>
+				
+									<h:panelGrid>
+										<p:outputLabel for="inFlag" value="Ativo?" />
+										<p:inputSwitch id="inFlag" value="#{usuarioController.usuario.flagAtivo}" offLabel="Não" onLabel="Sim" />
+										<p:message for="inFlag" />
+									</h:panelGrid>
 								</h:panelGrid>
-								
-								<p:outputLabel for="inPerfil" value="Perfil" styleClass="req" />
-								<h:panelGrid>
-									<p:selectOneMenu id="inPerfil" value="#{usuarioController.usuario.perfil}" required="true">
-										<f:selectItems value="#{enumHelper.perfis}" var="perfilVar" 
-											itemValue="#{perfilVar}" itemLabel="#{perfilVar.descricao}"
-											/>
-									</p:selectOneMenu> 
-									<p:message for="inPerfil" />
-								</h:panelGrid>
-			
-								<p:outputLabel for="inFlag" value="Ativo?" />
-								<h:panelGrid>
-									<p:inputSwitch id="inFlag" value="#{usuarioController.usuario.flagAtivo}" offLabel="Não" onLabel="Sim" />
-									<p:message for="inFlag" />
-								</h:panelGrid>
-								
+
+
+								<h:panelGrid cellpadding="5">
+									<h:panelGrid>
+										<p:outputLabel for="inCat" value="Categorias" styleClass="req" />
+										<p:selectManyCheckbox id="inCat" value="#{usuarioController.usuario.categorias }" required="true"
+											converter="#{chamadoCategoriaConverter}" layout="pageDirection"
+											disabled="#{usuarioController.usuario.flagPerfilFuncionario}">
+												<f:selectItems value="#{usuarioController.comboCategorias }" var="catVar" 
+													itemValue="#{catVar}" itemLabel="#{catVar.nome}"
+													/>
+										</p:selectManyCheckbox>
+										<p:message for="inCat" />
+									</h:panelGrid>
+								</h:panelGrid>								
+							
 							</h:panelGrid>
 						</p:panel>
 						
+
 						<p:panel rendered="#{not usuarioController.usuario.transient}">
 							<h:outputText value="Histórico" styleClass="destak3" />
 							<p:separator />

@@ -31,7 +31,6 @@ public class AcessoController implements Serializable {
 	private String senha;
 	
 	
-	
 	public String doLogin() {
 		UsuarioNIU user = usuarioService.buscarUsuarioPeloLoginESenha(login, senha);
 		if (user!=null) {
@@ -46,12 +45,23 @@ public class AcessoController implements Serializable {
 	}
 
 
-	private String permitirAcesso(UsuarioNIU user) {
-		sessionHolder.initSessao(user);
+	/**
+	 * Liberar o acesso, carregar usuario e guardando na sessao
+	 * @param usuario
+	 * @return
+	 */
+	private String permitirAcesso(UsuarioNIU usuario) {
+		usuario = usuarioService.carregarUsuario(usuario);
+		sessionHolder.initSessao(usuario);
 		return irParaHome();
 	}
 
 	
+	/**
+	 * Nega acesso o acesso com msg de erro e redirect para login
+	 * @param mensagemErro
+	 * @return
+	 */
 	private String negarAcesso(String mensagemErro) {
 		JSFUtil.addErrorMessage(mensagemErro);
 		return irParaLogin(false);
