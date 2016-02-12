@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+	<style type="text/css">
+		body {
+			font-family: Calibri;
+			font-size: 1.0em
+		}
+		div#container {
+			color: #009;
+			background-color: #fff;
+			width: 100%;
+		}
+		div#content {
+			border: 2px solid #009;
+			width: 80%;
+			margin: auto;
+			padding: 25px;
+			text-align: left;
+		}
+		hr#sep {
+			border: 1px solid #009;
+		}
+		#cellHeader {
+			color: #fff;
+			font-weight: bold;
+			background-color: #009;
+		}
+		#cellData {
+			background-color: #ff8;
+		}
+		#t1 {
+			font-size: 1.5em;
+			font-weight: bold;
+		}
+		#t2 {
+			font-size: 1.5em;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	
+	<div id="container">
+		<div id="content">
+
+			<div style="background-color: #dde;padding: 10px">
+				<img src="http://uni-srv-web01:8080/niu/resources/img/logo_uniplac_64.png" />
+				<span id="t1">NIU Governança</span>
+			</div>
+
+
+			<hr id="sep" />
+
+
+			<span id="t2">Novo Chamado</span>
+
+			<table cellspacing="5" cellpadding="5" width="100%">
+				<tr>
+					<td id="cellHeader">ID</td>
+					<td id="cellData">@ID@</td>
+				</tr>
+				<tr>
+					<td id="cellHeader">Título</td>
+					<td id="cellData">@TITULO@</td>
+				</tr>
+				<tr>
+					<td id="cellHeader">Detalhe</td>
+					<td id="cellData">@DETALHE@</td>
+				</tr>
+				<tr>
+					<td id="cellHeader">Categoria</td>
+					<td id="cellData">@CATEGORIA@</td>
+				</tr>
+				<tr>
+					<td id="cellHeader">Prioridade</td>
+					<td id="cellData">@PRIORIDADE@</td>
+				</tr>
+				<tr>
+					<td id="cellHeader">Criado por</td>
+					<td id="cellData">@CRIADO_POR@</td>
+				</tr>
+				<tr>
+					<td id="cellHeader">Criado em</td>
+					<td id="cellData">@CRIADO_EM@</td>
+				</tr>
+			</table>
+
+		</div>
+	</div>
+</body>
+</html>
