@@ -114,7 +114,7 @@
 							
 								<h:panelGrid cellpadding="5">
 									<h:panelGrid>
-										<p:outputLabel for="inLogin" value="Login" styleClass="req" />
+										<p:outputLabel for="inLogin" value="Login (do Windows)" styleClass="req" />
 										<p:inputText id="inLogin" value="#{usuarioController.usuario.login}" required="true" size="20" />
 										<p:message for="inLogin" />
 									</h:panelGrid>
@@ -215,52 +215,6 @@
 			
 	
 	
-				<p:tab title="Senha" rendered="#{not usuarioController.usuario.transient}">
-				
-					<h:form id="formUsuarioSenha">
-						<p:panel>
-							<h:panelGrid columns="2" cellpadding="5">
-							
-								<p:outputLabel for="inSenha" value="Senha" styleClass="req" />
-								<h:panelGrid>
-									<p:password id="inSenha" value="#{usuarioController.senha1}" required="true"
-										feedback="true" inline="false"
-										promptLabel="Entre com a senha" 
-										weakLabel="Fraca" 
-										goodLabel="Razoável"
-										strongLabel="Forte"
-										/>
-									<p:message for="inSenha" />
-								</h:panelGrid>
-				
-								<p:outputLabel for="inSenha2" value="Senha de confirmação" styleClass="req" />
-								<h:panelGrid>
-									<p:password id="inSenha2" value="#{usuarioController.senha2}" required="true"
-										feedback="true" inline="false"
-										promptLabel="Confirme a senha" 
-										weakLabel="Fraca" 
-										goodLabel="Razoável"
-										strongLabel="Forte"
-										/>
-									<p:message for="inSenha2" />
-								</h:panelGrid>
-							
-							</h:panelGrid>
-						</p:panel>
-				
-						<niu:globalNotification />
-						
-						<p:toolbar>
-							<p:toolbarGroup>
-								<p:commandButton icon="fa fa-key" value="Trocar Senha" style="font-size:1.3em"
-									action="#{usuarioController.trocarSenha() }"
-									update="@form"
-									/>
-							</p:toolbarGroup>
-						</p:toolbar>
-	
-					</h:form>
-				</p:tab>
 			</p:tabView>
 		</p:outputPanel>
 

@@ -8,6 +8,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 import br.edu.uniplac.niu.controller.holder.SessionHolder;
+import br.edu.uniplac.niu.controller.security.ActiveDirectoryAutenticator;
 import br.edu.uniplac.niu.controller.util.JSFUtil;
 import br.edu.uniplac.niu.model.entity.UsuarioNIU;
 import br.edu.uniplac.niu.model.service.UsuarioService;
@@ -32,15 +33,25 @@ public class AcessoController implements Serializable {
 	
 	
 	public String doLogin() {
-		UsuarioNIU user = usuarioService.buscarUsuarioPeloLoginESenha(login, senha);
-		if (user!=null) {
-			if (user.getFlagAtivo()) {
-				return permitirAcesso(user);
-			} else {
-				return negarAcesso("Usuário desabilitado"); 
-			}
-		} else {
+		ActiveDirectoryAutenticator autenticador = new ActiveDirectoryAutenticator();
+		boolean flagAutenticadoNoAD = autenticador.isAutenticate(login, senha);
+		
+		if (!flagAutenticadoNoAD) {
 			return negarAcesso("Login ou senha inválidos");
+
+		} else {
+			
+			UsuarioNIU user = usuarioService.buscarUsuarioPeloLoginOuCriar(login);
+			if (user==null) {
+				return negarAcesso("Usuário não encontrado");
+				
+			} else {
+				if (user.getFlagAtivo()) {
+					return permitirAcesso(user);
+				} else {
+					return negarAcesso("Usuário desabilitado"); 
+				}
+			}
 		}
 	}
 

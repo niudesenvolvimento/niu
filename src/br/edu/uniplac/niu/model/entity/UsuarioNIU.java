@@ -33,11 +33,11 @@ public class UsuarioNIU implements Serializable {
 
 	@NotNull
 	@Size(max=20)
-	private String login;
+	private String login;//do windows
 
 
-	@Size(max=500)
-	private String senha;
+//	@Size(max=500)//agora é controlada pelo AD
+//	private String senha;
 	
 	
 	@Size(max=100)
@@ -120,19 +120,9 @@ public class UsuarioNIU implements Serializable {
 	public void setLogin(String login) {
 		this.login = login;
 	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
 	public UsuarioPerfil getPerfil() {
 		return perfil;
 	}
-
 	public void setPerfil(UsuarioPerfil perfil) {
 		this.perfil = perfil;
 	}

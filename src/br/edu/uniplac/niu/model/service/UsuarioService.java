@@ -4,7 +4,6 @@ import static br.edu.uniplac.niu.model.util.QueryUtil.isNotBlank;
 import static br.edu.uniplac.niu.model.util.QueryUtil.isNotNull;
 import static br.edu.uniplac.niu.model.util.QueryUtil.toLikeMatchModeANY;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,8 +29,13 @@ import br.edu.uniplac.niu.model.exception.NegocioException;
 @Stateless
 public class UsuarioService {
 	
+	private static final String CRIADOR_AUTOMATICO = "CriadorAutomatico";
+	
 	
 	@PersistenceContext EntityManager manager;
+	
+	
+	
 	
 	/**
 	 * Salva instancia de usuario
@@ -71,12 +75,12 @@ public class UsuarioService {
 
 
 	
-	public UsuarioNIU trocarSenha(UsuarioNIU usuario, String novaSenha, String atualizador) {
-		usuario.setSenha( novaSenha );
-		gravarInfoLog(usuario, atualizador);
-		
-		return manager.merge( usuario );
-	}
+//	public UsuarioNIU trocarSenha(UsuarioNIU usuario, String novaSenha, String atualizador) {
+//		usuario.setSenha( novaSenha );
+//		gravarInfoLog(usuario, atualizador);
+//		
+//		return manager.merge( usuario );
+//	}
 	
 	
 	/**
@@ -124,21 +128,42 @@ public class UsuarioService {
 	
 	
 	/**
+	 * Busca um usuario pelo login ou cria um novo
+	 * @param login
+	 * @return
+	 */
+	public UsuarioNIU buscarUsuarioPeloLoginOuCriar(String login) {
+		UsuarioNIU usuarioEncontrado = buscarUsuarioNIUPeloLogin(login);
+		if (usuarioEncontrado!=null) {
+			return usuarioEncontrado;
+			
+		} else {
+			
+			UsuarioNIU novoUsuario = new UsuarioNIU();
+			novoUsuario.setPerfil( UsuarioPerfil.FUN );
+			novoUsuario.setLogin(login);
+			return salvarUsuarioNIU(novoUsuario, CRIADOR_AUTOMATICO);
+		}
+	}
+	
+	
+	
+	/**
 	 * Busca um usuario pelo email e senha. Usado na autenticacao
 	 * @param login
 	 * @param senha
 	 * @return
 	 */
-	public UsuarioNIU buscarUsuarioPeloLoginESenha(String login, String senha) {
-		try {
-			return manager.createNamedQuery("buscarUsuarioPeloLoginESenha", UsuarioNIU.class)
-					.setParameter("pLogin", login)
-					.setParameter("pSenha", senha)
-					.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
+//	public UsuarioNIU buscarUsuarioPeloLoginESenha(String login, String senha) {
+//		try {
+//			return manager.createNamedQuery("buscarUsuarioPeloLoginESenha", UsuarioNIU.class)
+//					.setParameter("pLogin", login)
+//					.setParameter("pSenha", senha)
+//					.getSingleResult();
+//		} catch (NoResultException e) {
+//			return null;
+//		}
+//	}
 
 	
 	/**

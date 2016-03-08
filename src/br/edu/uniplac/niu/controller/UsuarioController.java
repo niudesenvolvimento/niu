@@ -15,7 +15,6 @@ import br.edu.uniplac.niu.controller.util.JSFUtil;
 import br.edu.uniplac.niu.model.entity.ChamadoCategoria;
 import br.edu.uniplac.niu.model.entity.UsuarioNIU;
 import br.edu.uniplac.niu.model.entity.enumeration.UsuarioPerfil;
-import br.edu.uniplac.niu.model.exception.NegocioException;
 import br.edu.uniplac.niu.model.service.ChamadoService;
 import br.edu.uniplac.niu.model.service.UsuarioService;
 
@@ -93,19 +92,20 @@ public class UsuarioController implements Serializable {
 		carregarUsuario();
 	}
 	
-	
-	public void trocarSenha() {
-		conferirSenha();
-		usuario = usuarioService.trocarSenha(usuario, senha1, getLoginUsuarioLogado() ); 
-		popularUsuarios();
-		JSFUtil.addInfoMessage("Senha alterada com sucesso");
-	}
-	
-	private void conferirSenha() {
-		if (!senha1.equals(senha2)) {
-			throw new NegocioException("Senhas não conferem");
-		}
-	}
+
+//agora é via AD	
+//	public void trocarSenha() {
+//		conferirSenha();
+//		usuario = usuarioService.trocarSenha(usuario, senha1, getLoginUsuarioLogado() ); 
+//		popularUsuarios();
+//		JSFUtil.addInfoMessage("Senha alterada com sucesso");
+//	}
+//	
+//	private void conferirSenha() {
+//		if (!senha1.equals(senha2)) {
+//			throw new NegocioException("Senhas não conferem");
+//		}
+//	}
 	
 
 	public void remover() {
