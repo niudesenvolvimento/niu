@@ -34,6 +34,7 @@
 		<p:panel>
 
 			<p:commandButton icon="fa fa-plus" value="Novo" style="font-size:1.3em"
+				rendered="#{sessionHolder.usuario.flagPerfilInformatica}" 
 				process="@this" 
 				action="#{bctutorialController.novo()}"
 				update=":formTutorial"
@@ -75,6 +76,7 @@
 	
 					<p:column styleClass="col5p colCenter">
 						<p:commandButton icon="fa fa-edit" value="editar" 
+							rendered="#{sessionHolder.usuario.flagPerfilInformatica}" 
 							process="@this"
 							action="#{bctutorialController.editar(tutorialVar)}"
 							update=":formTutorial"

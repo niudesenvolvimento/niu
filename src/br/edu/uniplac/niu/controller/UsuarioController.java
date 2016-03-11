@@ -13,9 +13,11 @@ import javax.faces.bean.ViewScoped;
 import br.edu.uniplac.niu.controller.holder.SessionHolder;
 import br.edu.uniplac.niu.controller.util.JSFUtil;
 import br.edu.uniplac.niu.model.entity.ChamadoCategoria;
+import br.edu.uniplac.niu.model.entity.Setor;
 import br.edu.uniplac.niu.model.entity.UsuarioNIU;
 import br.edu.uniplac.niu.model.entity.enumeration.UsuarioPerfil;
 import br.edu.uniplac.niu.model.service.ChamadoService;
+import br.edu.uniplac.niu.model.service.InventarioService;
 import br.edu.uniplac.niu.model.service.UsuarioService;
 
 /**
@@ -29,6 +31,7 @@ public class UsuarioController implements Serializable {
 	
 	@EJB UsuarioService usuarioService;
 	@EJB ChamadoService chamadoService;
+	@EJB InventarioService inventarioService;
 	
 	@ManagedProperty("#{sessionHolder}")
 	private SessionHolder sessionHolder;
@@ -44,6 +47,7 @@ public class UsuarioController implements Serializable {
 	
 	//combos
 	private List<ChamadoCategoria> comboCategorias;
+	private List<Setor> comboSetores;
 	
 
 
@@ -55,6 +59,7 @@ public class UsuarioController implements Serializable {
 	//inits...
 	@PostConstruct void init() {
 		popularComboCategorias();
+		popularComboSetores();
 	}
 
 
@@ -62,6 +67,11 @@ public class UsuarioController implements Serializable {
 		comboCategorias = chamadoService.pesquisarChamadoCategoriaPeloFlagAtivo( true );
 	}
 
+	private void popularComboSetores() {
+		comboSetores = inventarioService.pesquisarSetorPeloFlagAtivo( true );
+	}
+	
+	
 
 	private void popularUsuarios() {
 		usuarios = usuarioService.pesquisarUsuarioNIUPelosFiltros(filtroLogin, filtroPerfil);
@@ -77,6 +87,7 @@ public class UsuarioController implements Serializable {
 	
 	public void novo() {
 		usuario = new UsuarioNIU();
+		usuario.setSetor( new Setor() );
 	}
 
 
@@ -173,6 +184,7 @@ public class UsuarioController implements Serializable {
 	public List<ChamadoCategoria> getComboCategorias() {
 		return comboCategorias;
 	}
-
-	
+	public List<Setor> getComboSetores() {
+		return comboSetores;
+	}
 }

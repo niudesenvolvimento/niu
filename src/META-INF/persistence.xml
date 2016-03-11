@@ -11,6 +11,13 @@
 		
 		<class>br.edu.uniplac.niu.model.entity.UsuarioNIU</class>
 		<class>br.edu.uniplac.niu.model.entity.InfoLog</class>
+		<class>br.edu.uniplac.niu.model.entity.BCManual</class>
+		<class>br.edu.uniplac.niu.model.entity.BCTutorial</class>
+		<class>br.edu.uniplac.niu.model.entity.Chamado</class>
+		<class>br.edu.uniplac.niu.model.entity.ChamadoCategoria</class>
+		<class>br.edu.uniplac.niu.model.entity.ComputadorMarca</class>
+		<class>br.edu.uniplac.niu.model.entity.InventarioComputador</class>
+		<class>br.edu.uniplac.niu.model.entity.Setor</class>
 
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="update" />

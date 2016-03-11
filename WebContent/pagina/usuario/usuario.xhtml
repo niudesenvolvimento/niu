@@ -62,21 +62,26 @@
 					<h:outputText value="#{usuarioVar.email}" />
 				</p:column>
 
-				<p:column headerText="Perfil" sortBy="#{usuarioVar.perfil}">
+				<p:column headerText="Perfil" sortBy="#{usuarioVar.perfil.descricao }" styleClass="colCenter">
 					<h:outputText value="#{usuarioVar.perfil.descricao}" />
 				</p:column>
 			
-				<p:column headerText="Criado em" sortBy="#{usuarioVar.infoLog.criadoEm}">
+				<p:column headerText="Setor" sortBy="#{usuarioVar.setor.nome }" styleClass="colCenter">
+					<h:outputText value="#{usuarioVar.setor.nome }" />
+				</p:column>
+
+				<p:column headerText="Ativo?" styleClass="colCenter col5p" >
+					<niu:displayFlag flag="#{usuarioVar.flagAtivo}" />
+				</p:column>
+
+				<p:column headerText="Criado em" sortBy="#{usuarioVar.infoLog.criadoEm}" styleClass="col10p">
 					<niu:outputTimestamp value="#{usuarioVar.infoLog.criadoEm}" styleClass="less2" />
 				</p:column>
 
-				<p:column headerText="Criado por" sortBy="#{usuarioVar.infoLog.criadoPor}">
+				<p:column headerText="Criado por" sortBy="#{usuarioVar.infoLog.criadoPor}" styleClass="col10p">
 					<h:outputText value="#{usuarioVar.infoLog.criadoPor}" styleClass="less2" />
 				</p:column>
 			
-				<p:column headerText="Ativo?" styleClass="colCenter col10p" >
-					<niu:displayFlag flag="#{usuarioVar.flagAtivo}" />
-				</p:column>
 
 				<p:column styleClass="col10p colCenter">
 					<p:commandButton icon="fa fa-edit" value="Editar" 
@@ -114,7 +119,7 @@
 							
 								<h:panelGrid cellpadding="5">
 									<h:panelGrid>
-										<p:outputLabel for="inLogin" value="Login (do Windows)" styleClass="req" />
+										<p:outputLabel for="inLogin" value="Login do Windows" styleClass="req" />
 										<p:inputText id="inLogin" value="#{usuarioController.usuario.login}" required="true" size="20" />
 										<p:message for="inLogin" />
 									</h:panelGrid>
@@ -136,6 +141,16 @@
 										<p:message for="inPerfil" />
 									</h:panelGrid>
 				
+									<h:panelGrid>
+										<p:outputLabel for="inSetor" value="Setor" styleClass="req" />
+										<p:selectOneMenu id="inSetor" value="#{usuarioController.usuario.setor.id }" required="true">
+											<f:selectItems value="#{usuarioController.comboSetores }" var="setorVar" 
+												itemValue="#{setorVar.id}" itemLabel="#{setorVar.nome}"
+												/>
+										</p:selectOneMenu> 
+										<p:message for="inSetor" />
+									</h:panelGrid>
+
 									<h:panelGrid>
 										<p:outputLabel for="inFlag" value="Ativo?" />
 										<p:inputSwitch id="inFlag" value="#{usuarioController.usuario.flagAtivo}" offLabel="Não" onLabel="Sim" />
