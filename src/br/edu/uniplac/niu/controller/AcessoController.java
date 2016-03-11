@@ -46,7 +46,17 @@ public class AcessoController implements Serializable {
 	
 	
 	@PostConstruct void init() {
+		novoUsuarioRecemCriado();
+		popularComboSetores();
+	}
+	
+	private void popularComboSetores() {
 		comboSetores = inventarioService.pesquisarSetorPeloFlagAtivo(true);
+	}
+	
+	private void novoUsuarioRecemCriado() {
+		usuarioRecemCriado = new UsuarioNIU();
+		usuarioRecemCriado.setSetor( new Setor() );
 	}
 	
 	
@@ -104,7 +114,7 @@ public class AcessoController implements Serializable {
 	private String permitirAcesso(UsuarioNIU usuario) {
 		usuario = usuarioService.carregarUsuario(usuario);
 		sessionHolder.initSessao(usuario);
-		return irParaHome();
+		return irParaHome(false);
 	}
 
 	
@@ -136,8 +146,12 @@ public class AcessoController implements Serializable {
 	 * Redireciona para pagina HOME
 	 * @return
 	 */
-	private String irParaHome() {
-		return "/home";
+	private String irParaHome(boolean flagRedirect) {
+		if (flagRedirect) {
+			return "/home?faces-redirect=true";
+		} else {
+			return "/home";
+		}
 	}
 	
 	
@@ -159,9 +173,9 @@ public class AcessoController implements Serializable {
 	 * Salva usuario recem criado
 	 */
 	public String salvarUsuarioRecemCriado() {
-		usuarioService.salvarUsuarioRecemCriado(usuarioRecemCriado);
+		usuarioRecemCriado = usuarioService.salvarUsuarioRecemCriado(usuarioRecemCriado);
 		JSFUtil.addInfoMessage("Usuário recém criado salvo com sucesso");
-		return irParaHome();
+		return permitirAcesso(usuarioRecemCriado);
 	}
 	
 	
