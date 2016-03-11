@@ -29,7 +29,7 @@ import br.edu.uniplac.niu.model.exception.NegocioException;
 @Stateless
 public class UsuarioService {
 	
-	private static final String CRIADOR_AUTOMATICO = "CriadorAutomatico";
+	private static final String CRIADOR_AUTOMATICO = "UsuarioService";
 	
 	
 	@PersistenceContext EntityManager manager;
@@ -48,6 +48,16 @@ public class UsuarioService {
 		
 		gravarInfoLog( u, criadorOuAtualizador );
 		return manager.merge(u);
+	}
+	
+	
+	/**
+	 * Salva usuario recem criado com criado automatico.
+	 * @param usuarioRecemCriado
+	 * @return
+	 */
+	public UsuarioNIU salvarUsuarioRecemCriado(UsuarioNIU usuarioRecemCriado) {
+		return salvarUsuarioNIU(usuarioRecemCriado, CRIADOR_AUTOMATICO);
 	}
 	
 	

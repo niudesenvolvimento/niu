@@ -26,10 +26,10 @@ public class ActiveDirectoryAutenticator {
 		String domainUsername = String.format("%s\\%s", DOMAIN_NAME, username);
         
         Hashtable<String, String> env = new Hashtable<>();  
-        env.put(Context.INITIAL_CONTEXT_FACTORY,"com.sun.jndi.ldap.LdapCtxFactory");  
-        env.put(Context.PROVIDER_URL, DOMAIN_URL);  
-        env.put(Context.SECURITY_AUTHENTICATION, "simple");  
-        env.put(Context.SECURITY_PRINCIPAL, domainUsername);  
+        env.put(Context.INITIAL_CONTEXT_FACTORY,"com.sun.jndi.ldap.LdapCtxFactory");
+        env.put(Context.PROVIDER_URL, DOMAIN_URL);
+        env.put(Context.SECURITY_AUTHENTICATION, "simple");
+        env.put(Context.SECURITY_PRINCIPAL, domainUsername);
         env.put(Context.SECURITY_CREDENTIALS, pass);  
 
         DirContext dirContext = null;

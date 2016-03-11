@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -59,6 +60,13 @@ public class UsuarioNIU implements Serializable {
 	private List<ChamadoCategoria> categorias;
 	
 	
+	/**
+	 * Setor que o usuario pertence
+	 */
+	@ManyToOne
+	private Setor setor;
+	
+	
 	private Boolean flagAtivo = true;
 	
 	
@@ -91,6 +99,14 @@ public class UsuarioNIU implements Serializable {
 
 	public void setCategorias(List<ChamadoCategoria> categorias) {
 		this.categorias = categorias;
+	}
+
+	public Setor getSetor() {
+		return setor;
+	}
+
+	public void setSetor(Setor setor) {
+		this.setor = setor;
 	}
 
 	public String getEmail() {
@@ -168,6 +184,21 @@ public class UsuarioNIU implements Serializable {
 	
 	public Boolean getFlagPerfilFuncionario() {
 		return getPerfil().equals( UsuarioPerfil.FUN );
+	}
+	
+	
+	/**
+	 * Recem criado é quando foi autenticado pela primeira vez (no AD)
+	 * e foi criado na base local com dados default.
+	 * Neste caso, o email estará vazio.
+	 * @return
+	 */
+	public Boolean getFlagRecemCriado() {
+		if (getEmail()==null || getEmail().trim().isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	
